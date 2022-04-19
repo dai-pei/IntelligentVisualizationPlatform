@@ -106,3 +106,12 @@ JavaScript 引擎怎么知道异步任务有没有结果，能不能进入主线
 https://wangdoc.com/javascript/async/general.html
 
 https://www.sveltejs.cn/docs#Client-side_component_API
+
+# 20220419
+## promise
+```
+var p1=new Promise(func);
+p1.then(func2);
+```
+总的来说，传统的回调函数写法使得代码混成一团，变得横向发展而不是向下发展。Promise 就是解决这个问题，使得异步流程可以写成同步流程。
+Promise 原本只是社区提出的一个构想，一些函数库率先实现了这个功能。ECMAScript 6 将其写入语言标准，目前 JavaScript 原生支持 Promise 对象。
