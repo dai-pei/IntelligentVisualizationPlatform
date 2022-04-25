@@ -106,3 +106,7 @@ JavaScript 引擎怎么知道异步任务有没有结果，能不能进入主线
 https://wangdoc.com/javascript/async/general.html
 
 https://www.sveltejs.cn/docs#Client-side_component_API
+
+<<<<<<< HEAD
+
+>>>>>>> e9c32ec645132bdd9b58416bb0dffdc1e0ec4ab0
