@@ -104,9 +104,8 @@ JavaScript 引擎怎么知道异步任务有没有结果，能不能进入主线
 
 ### 事件监听
 https://wangdoc.com/javascript/async/general.html
-
 https://www.sveltejs.cn/docs#Client-side_component_API
-=======
+
 ## svelte反应式值的更新
  Svelte 的反应性是由赋值语句触发的，因此使用数组的诸如 push 和 splice 之类的方法就不会触发自动更新。例如，点击按钮就不会执行任何操作。
 解决该问题的一种方法是添加一个多余的赋值语句
@@ -129,4 +128,6 @@ dispatch在promise里面用到了type message, topic='xxx',这个不知道是什
 
 ## js箭头函数
 valueH=(val)=>{"hello"+val};
->>>>>>> 0505f9e23f6a2091b6b877d7b957a871765127ca
+
+# 20220425
+## 
