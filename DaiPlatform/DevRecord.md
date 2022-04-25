@@ -106,7 +106,27 @@ JavaScript 引擎怎么知道异步任务有没有结果，能不能进入主线
 https://wangdoc.com/javascript/async/general.html
 
 https://www.sveltejs.cn/docs#Client-side_component_API
+=======
+## svelte反应式值的更新
+ Svelte 的反应性是由赋值语句触发的，因此使用数组的诸如 push 和 splice 之类的方法就不会触发自动更新。例如，点击按钮就不会执行任何操作。
+解决该问题的一种方法是添加一个多余的赋值语句
 
-<<<<<<< HEAD
+# 20220421
+## async await
+async会返回一个promise对象
+await会等待任意表达式的结果，如果await等待的是promise对象，则它会阻塞其后面的代码，等到promise对象resolve，然后得到resolve的值并返回
+这就是 await 必须用在 async 函数中的原因。async 函数调用不会造成阻塞，它内部所有的阻塞都被封装在一个 Promise 对象中异步执行。
 
->>>>>>> e9c32ec645132bdd9b58416bb0dffdc1e0ec4ab0
+on:mousemove
+## js事件分发：把一个封闭模块的数据传递给另一个封闭模块
+dispatch等方法
+
+dispatch在promise里面用到了type message, topic='xxx',这个不知道是什么用法
+
+
+## 组件的转发
+与 DOM 事件不同， 组件事件不会 冒泡（bubble） ，如果你想要在某个深层嵌套的组件上监听事件，则中间组件必须 转发（forward） 该事件。
+
+## js箭头函数
+valueH=(val)=>{"hello"+val};
+>>>>>>> 0505f9e23f6a2091b6b877d7b957a871765127ca
