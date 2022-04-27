@@ -129,5 +129,106 @@ dispatch在promise里面用到了type message, topic='xxx',这个不知道是什
 ## js箭头函数
 valueH=(val)=>{"hello"+val};
 
-# 20220425
-## 
+# 20220422
+## bind，组件绑定，可以通过获取当前时间戳来实现实时随机变色效果
+## bind:value={valueName}
+## bind:checked={value} 
+bind冒号后面跟着的是本dom或者本组件需要的值/属性，它可以是值，如果本dom是类似于textarea等，可以是checked，如果本dom是一个复选框
+
+## svelte组件的生命周期
+### onMount
+一个componet会被render到DOM上，on mount会在组件被渲染到DOM之上后
+### onDestory
+For example, we can add a setInterval function when our component initialises, and clean it up when it's no longer relevant. Doing so prevents memory leaks.
+防止内存泄漏
+### beforeUpdate 和 afterUpdate
+顾名思义，beforeUpdate 函数实现在DOM渲染完成前执行。afterUpdate函数则相反，它会运行在你的异步数据加载完成后。
+
+onMount生命周期在beforeUpdate和afterUpdate之间？
+
+### tick函数
+
+# 20220424
+## 箭头函数，及其简写方法
+https://www.cnblogs.com/fundebug/p/6904753.html
+
+# 20220426
+## electron
+主进程+渲染进程，一个主进程+多个渲染进程，electron在本地创建了一个chromium引擎，用来跑所有的html/js，但是不同于浏览器，electron可以直接调用io.js，所以与底层操作系统有直接通信的能力
+主进程使用 BrowserWindow 实例创建网页。每个 BrowserWindow 实例都在自己的渲染进程里运行着一个网页。当一个 BrowserWindow 实例被销毁后，相应的渲染进程也会被终止。
+主进程管理所有页面和与之对应的渲染进程。每个渲染进程都是相互独立的，并且只关心他们自己的网页。
+electron中，渲染进程（每个网页）无法直接调用本地GUI资源，而是需要用electron提供的IPC向主进程请求资源，主进程对本地资源进行调用
+electron中，也提供了remote模块，用以rpc风格进行服务调用
+
+## Electron 应用的目录结构
+```
+your-app/
+├── package.json
+├── main.js
+└── index.html
+```
+package.json的格式和 Node 的完全一致，并且那个被 main 字段声明的脚本文件是你的应用的启动脚本，它运行在主进程上。你应`用里的 package.json 看起来应该像：
+```
+{
+  "name"    : "your-app",
+  "version" : "0.1.0",
+  "main"    : "main.js"
+}
+```
+注意：如果 main 字段没有在 package.json 声明，Electron会优先加载 index.js。
+
+main.js 应该用于创建窗口和处理系统事件，一个典型的例子如下：
+```
+var app = require('app');  // 控制应用生命周期的模块。
+var BrowserWindow = require('browser-window');  // 创建原生浏览器窗口的模块 https://www.requirejs-cn.cn/
+
+// 保持一个对于 window 对象的全局引用，不然，当 JavaScript 被 GC，window 会被自动地关闭
+var mainWindow = null;
+
+// 当所有窗口被关闭了，退出。
+app.on('window-all-closed', function() {
+  // 在 OS X 上，通常用户在明确地按下 Cmd + Q 之前
+  // 应用会保持活动状态
+  if (process.platform != 'darwin') {
+    app.quit();
+  }
+});
+
+// 当 Electron 完成了初始化并且准备创建浏览器窗口的时候
+// 这个方法就被调用
+app.on('ready', function() {
+  // 创建浏览器窗口。
+  mainWindow = new BrowserWindow({width: 800, height: 600});
+
+  // 加载应用的 index.html
+  mainWindow.loadURL('file://' + __dirname + '/index.html');
+
+  // 打开开发工具
+  mainWindow.openDevTools();
+
+  // 当 window 被关闭，这个事件会被触发
+  mainWindow.on('closed', function() {
+    // 取消引用 window 对象，如果你的应用支持多窗口的话，
+    // 通常会把多个 window 对象存放在一个数组里面，
+    // 但这次不是。
+    mainWindow = null;
+  });
+});
+```
+有空可以研究下JS的gc：https://blog.csdn.net/szengtal/article/details/99488127
+
+最后，你想展示的 index.html ：
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using io.js <script>document.write(process.version)</script>
+    and Electron <script>document.write(process.versions['electron'])</script>.
+  </body>
+</html>
+```
+

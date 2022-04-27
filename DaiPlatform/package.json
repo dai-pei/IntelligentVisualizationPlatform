@@ -2,17 +2,16 @@
     "name": "visulize-platform",
     "version": "0.0",
     "description": "Visulize Neural Networks",
+    "main": "main.js",
     "author": "dai pei",
     "scripts": {
-        "start":"",
-        "run":"",
-        "tsc":"tsc"
-    },
-    "dependencies": {
-
+        "start": "",
+        "run": "",
+        "tsc": "tsc"
     },
     "devDependencies": {
-
+        "electron": "^18.1.0"
     }
-
 }
+
+进度：看到bundle.js
