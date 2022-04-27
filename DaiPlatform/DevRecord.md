@@ -232,3 +232,17 @@ app.on('ready', function() {
 </html>
 ```
 
+# 20220427
+## git原理——快照的实现 
+维护一个树形结构，每个修改的diff为树上的一个节点<br>
+[git深入教程——解决冲突](https://www.yiibai.com/git/git_handling_conflicts.html)
+
+## 模块是独立的文件，该文件内部的所有的变量外部都无法获取。如果希望获取某个变量，必须通过export输出
+为了让Node.js的文件可以相互调用，Node.js提供了一个简单的模块系统。
+模块是Node.js 应用程序的基本组成部分，文件和模块是一一对应的。换言之，一个 Node.js 文件就是一个模块，这个文件可能是JavaScript 代码、JSON 或者编译过的C/C++ 扩展。
+
+## typescript是js的超集
+1. 需要先用tsc(ts compiler把ts文件编译成js文件)
+2. typescript最重要的:显式类型声明,
+
+进度:https://www.w3cschool.cn/typescript/typescript-tutorial.html
