@@ -246,3 +246,48 @@ app.on('ready', function() {
 2. typescript最重要的:显式类型声明,
 
 进度:https://www.w3cschool.cn/typescript/typescript-tutorial.html
+
+# 20220505
+## complier options
+script defer关键字：延迟script的加载
+## npm范围包
+@babel/preset-env
+@组织名/包名
+这个@babel是npm中的范围包，和公共包一样是个包
+
+# 20220506
+## svelte中的promise和await
+promise的完成是一个promise链条上的一环，它完成后才开始下一环
+（Basically, each promise represents the completion of another asynchronous step in the chain.）
+## 变量提升
+将当前作用域的所有变量的声明，提升到程序的顶部，因此，上面的代码等价于以下代码，这样是不是就能明白一些了？
+变量提升只提升声明语句，不提升赋值语句，所以如果声明+赋值，则只提升了声明，仍然是undefined
+
+当函数声明与其他声明一起出现的时候，是以谁为准呢？答案就是，函数声明高于一切
+有多个函数声明的时候，是由最后的函数声明来替代前面的。
+
+# 20220511
+前端框架与css框架的概念区别
+https://www.zhihu.com/question/304757674
+
+
+
+## 技术选型：ui库的选择
+因为已经确定选择了svelte这个前端框架，所以需要配合一个css库/ui组件库来使用，搜到了：
+https://www.jdon.com/56558
+
+1. Svelte Material UI
+Material 是谷歌的 UI 设计系统。Svelte Material UI 以预制Svelte 组件的形式为您提供此设计系统。如果您喜欢扁平化设计并且是 Material 的忠实粉丝，那么您一定会喜欢 Svelte Material UI！
+ 
+2. Carbon Components Svelte
+Carbon 是IBM 的开源设计系统。Carbon Components Svelte 将这个有趣的设计系统的力量带到了 Svelte。
+Carbon 现在可能和其他设计系统一样流行，但它绝对是一个有趣的系统。如果你不想走主流路线，那就试试吧！
+ 
+3. Smelte
+Smelte 是 Google Material Design 在 Svelte 和 Tailwind 之上的另一种实现。Smelte 绝对是 Svelte Material UI 的不错替代品，特别是如果您喜欢 Tailwind 的易用性。Smelte 与它很好地集成在一起，并允许您使用 Tailwind 技能来即时改变样式。
+ 
+4. Svelteit
+Svelteit 是一个简约的 UI/UX 组件库。它没有遵循特定的设计语言，但仍然具有很好的风格。Svelteit 的简约方法绝对值得一试。它是轻量级的，足以创建漂亮的 UI！
+ 
+5. Attractions
+Attractions 是 Svelte 的时尚且实用的 UI 套件。它完全可以使用 Sass 进行样式化！整体风格不是您今天经常看到的通常的平面设计。它在必要时增加了深度，同时又不会变得太好玩。

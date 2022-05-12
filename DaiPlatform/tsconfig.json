@@ -1,5 +1,12 @@
 {
     "compilerOptions": {
-        "target": "ES6"
-    }
+        "target": "ES6",
+        "allowJs": true,
+        "outDir": "./build",
+        "resolveJsonModule": true
+    },
+    "include": [
+        // 这里为什么能表示src底下的所有文件
+        "./src/**/*"
+    ]
 }

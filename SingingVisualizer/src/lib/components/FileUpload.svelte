@@ -1,5 +1,7 @@
 <script lang="ts">
   let files: FileList | undefined;
+  // 这里表示可以将undefined赋值给files，如果设置了编译选项"strictNullChecks": true，
+  // 则可选参数会被自动加上 |undefined
 
   export let onFileUploaded: (file: File) => void;
   export let id: string;
