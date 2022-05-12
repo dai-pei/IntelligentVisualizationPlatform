@@ -291,3 +291,11 @@ Svelteit 是一个简约的 UI/UX 组件库。它没有遵循特定的设计语�
  
 5. Attractions
 Attractions 是 Svelte 的时尚且实用的 UI 套件。它完全可以使用 Sass 进行样式化！整体风格不是您今天经常看到的通常的平面设计。它在必要时增加了深度，同时又不会变得太好玩。
+
+[svelte原理与测评](https://juejin.cn/post/7044387319352131597)
+
+[另一个electron svelte template](https://github.com/codediodeio/electron-forge-svelte/blob/master/package.json)
+
+temp:
+https://learnku.com/articles/45831
+https://learnku.com/articles/45833
