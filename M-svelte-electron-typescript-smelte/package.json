@@ -76,6 +76,7 @@
     "@typescript-eslint/parser": "^5.9.0",
     "clean-css": "^5.1.2",
     "cross-env": "^7.0.3",
+    "d3": "^7.4.4",
     "electron": "^16.0.6",
     "electron-builder": "^22.11.7",
     "eslint": "^8.6.0",

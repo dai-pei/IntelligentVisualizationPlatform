@@ -299,3 +299,12 @@ Attractions 是 Svelte 的时尚且实用的 UI 套件。它完全可以使用 S
 temp:
 https://learnku.com/articles/45831
 https://learnku.com/articles/45833
+
+# 20220515
+## cnnexplainer
+tensorflow.js作为gpu加速推理预训练的模型
+svelte：前端框架
+d3.js：交互式操作
+
+## DOM技术
+文档对象模型指的是把文档、每个标签等都变成对象，这样方便直接对它们当成一个对象元素进行操作
