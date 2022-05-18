@@ -1,4 +1,6 @@
 <script lang="ts">
+import UploadMusicAnimation from "./UploadMusicAnimation.svelte";
+
     function handleFileUploaded(e: Event) {
         const target = e.target as HTMLInputElement;
         const files = target.files;
@@ -25,8 +27,9 @@
                 file:font-semibold file:text-secondary-content hover:file:bg-secondary-focus" />
         </div>
     </form>
-
 </section>
+<div>
+</div>
 
 <style>
     .recorder {
