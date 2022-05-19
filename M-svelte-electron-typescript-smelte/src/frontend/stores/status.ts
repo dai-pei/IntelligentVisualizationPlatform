@@ -1,3 +1,3 @@
 import { writable } from "svelte/store";
 
-export let CurrentSongPath=writable(null);
+export let CurrentSongPath=writable("");

@@ -23,7 +23,9 @@ h1 {
 <script lang="ts">
 export let name: string;
 import "smelte/src/tailwind.css";
-import Test from "./components/Test.svelte";
+// import Player from "./components/Player.svelte";
+import PlayerWave from "./components/PlayerWave.svelte";
+import UploadMusic from "./components/UploadMusic.svelte";
 import {CurrentSongPath} from './stores/status'
 let count_value:any;
 CurrentSongPath.subscribe(value => {
@@ -33,9 +35,10 @@ CurrentSongPath.subscribe(value => {
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 <main>
-    <h1>test hello</h1>
-    <h1>Hello {name}!</h1>
-    <Test></Test>
+    <!-- <h1>test hello</h1>
+    <h1>Hello {name}!</h1> -->
+    <!-- <UploadMusic/> -->
+    <PlayerWave/>
     <p>{count_value}</p>
 
 </main>

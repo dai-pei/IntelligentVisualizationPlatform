@@ -308,3 +308,17 @@ d3.js：交互式操作
 
 ## DOM技术
 文档对象模型指的是把文档、每个标签等都变成对象，这样方便直接对它们当成一个对象元素进行操作
+
+# 20220519
+## 转录，mel频谱图深入理解
+https://zhuanlan.zhihu.com/p/198900624
+
+## 梅尔刻度
+https://zhuanlan.zhihu.com/p/421460202
+
+## fft与信号加窗
+https://blog.csdn.net/AnimateX/article/details/80532376
+https://blog.csdn.net/s09094031/article/details/105744859
+
+## fft点和采样频率
+https://blog.csdn.net/weixin_34382015/article/details/116122375
