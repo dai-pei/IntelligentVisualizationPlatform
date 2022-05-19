@@ -25,7 +25,7 @@ export let name: string;
 import "smelte/src/tailwind.css";
 import Test from "./components/Test.svelte";
 import {CurrentSongPath} from './stores/status'
-let count_value;
+let count_value:any;
 CurrentSongPath.subscribe(value => {
 		count_value = value;
 	})
