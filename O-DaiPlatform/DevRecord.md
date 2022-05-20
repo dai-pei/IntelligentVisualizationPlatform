@@ -322,3 +322,7 @@ https://blog.csdn.net/s09094031/article/details/105744859
 
 ## fft点和采样频率
 https://blog.csdn.net/weixin_34382015/article/details/116122375
+
+# 20220520
+## d3版本问题
+test.svelte中原本的代码d3 v3的代码，然而升级到v5后，很多api名字都变了，所以进行修改
