@@ -326,3 +326,32 @@ https://blog.csdn.net/weixin_34382015/article/details/116122375
 # 20220520
 ## d3版本问题
 test.svelte中原本的代码d3 v3的代码，然而升级到v5后，很多api名字都变了，所以进行修改
+
+# 20220521
+## fft in js
+https://zhuanlan.zhihu.com/p/197450738
+
+## ts类型别名
+TypeScript 提供了为类型注解设置别名的便捷语法，你可以使用 type SomeName = someValidTypeAnnotation 来创建别名：
+```
+type StrOrNum = string | number;
+
+// 使用
+let sample: StrOrNum;
+sample = 123;
+sample = '123';
+
+// 会检查类型
+sample = true; // Error
+```
+
+## 是改造dsp.js，还是electron+python前后端通信？
+选择了后者：
+https://zhuanlan.zhihu.com/p/36356443
+
+前者已经不再维护
+
+to see
+https://www.cnblogs.com/cc11001100/p/14290450.html
+https://www.cnblogs.com/feng0815/p/14490087.html
+https://jkchao.github.io/typescript-book-chinese/typings/migrating.html#%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BB%A3%E7%A0%81
