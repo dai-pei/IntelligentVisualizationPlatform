@@ -278,17 +278,17 @@ https://www.jdon.com/56558
 
 1. Svelte Material UI
 Material 是谷歌的 UI 设计系统。Svelte Material UI 以预制Svelte 组件的形式为您提供此设计系统。如果您喜欢扁平化设计并且是 Material 的忠实粉丝，那么您一定会喜欢 Svelte Material UI！
- 
+
 2. Carbon Components Svelte
 Carbon 是IBM 的开源设计系统。Carbon Components Svelte 将这个有趣的设计系统的力量带到了 Svelte。
 Carbon 现在可能和其他设计系统一样流行，但它绝对是一个有趣的系统。如果你不想走主流路线，那就试试吧！
- 
+
 3. Smelte
 Smelte 是 Google Material Design 在 Svelte 和 Tailwind 之上的另一种实现。Smelte 绝对是 Svelte Material UI 的不错替代品，特别是如果您喜欢 Tailwind 的易用性。Smelte 与它很好地集成在一起，并允许您使用 Tailwind 技能来即时改变样式。
- 
+
 4. Svelteit
 Svelteit 是一个简约的 UI/UX 组件库。它没有遵循特定的设计语言，但仍然具有很好的风格。Svelteit 的简约方法绝对值得一试。它是轻量级的，足以创建漂亮的 UI！
- 
+
 5. Attractions
 Attractions 是 Svelte 的时尚且实用的 UI 套件。它完全可以使用 Sass 进行样式化！整体风格不是您今天经常看到的通常的平面设计。它在必要时增加了深度，同时又不会变得太好玩。
 
@@ -355,3 +355,24 @@ to see
 https://www.cnblogs.com/cc11001100/p/14290450.html
 https://www.cnblogs.com/feng0815/p/14490087.html
 https://jkchao.github.io/typescript-book-chinese/typings/migrating.html#%E7%AC%AC%E4%B8%89%E6%96%B9%E4%BB%A3%E7%A0%81
+
+python flask restful 设置不同路由
+electron主线程访问这些本地路由，得到处理过的librosa数据。网络net模块还是原生nodejs
+python脚本可以访问本地音频文件，nodejs可以吗？渲染线程肯定不可以，主线程可以吗
+
+## electron的net模块访问外部网络，还是用原生nodejs
+## 最终项目架构
+前端：svelte前端框架组件库+d3 css样式及交互效果，electron打包成桌面应用
+后端：logic和stores中的ts文件
+音频处理：python+librosa处理，python flask restful提供网络访问接口，由svelte组件中的js直接访问
+
+## 需要一个electron或者node或者ts能够访问网络或者rpc服务的库，然而got库会报错'node_events is not defined'
+https://github.com/sindresorhus/got/blob/main/documentation/tips.md#electron-net-module-is-not-supported
+
+## 如果是python程序跑在6000端口，会报错 不安全端口
+https://blog.csdn.net/testcs_dn/article/details/39186225
+所以避开这些端口，用了6005
+
+
+
+tosee：https://www.sveltejs.cn/tutorial/spread-props

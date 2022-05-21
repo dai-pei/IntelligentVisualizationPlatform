@@ -28,6 +28,7 @@ const createWindow = () => {
     webPreferences: {
       devTools: isProd ? false : true,
       contextIsolation: true,
+      webSecurity: false, //此参数禁用当前窗口的同源策略
     },
   });
 
