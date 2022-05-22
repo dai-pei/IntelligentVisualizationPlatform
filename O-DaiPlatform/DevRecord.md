@@ -373,6 +373,9 @@ https://github.com/sindresorhus/got/blob/main/documentation/tips.md#electron-net
 https://blog.csdn.net/testcs_dn/article/details/39186225
 所以避开这些端口，用了6005
 
+to see：
+https://www.sveltejs.cn/tutorial/spread-props
 
-
-tosee：https://www.sveltejs.cn/tutorial/spread-props
+# 20220522
+## flask 快速入门
+http://www.pythondoc.com/flask/quickstart.html
