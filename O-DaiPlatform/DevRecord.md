@@ -381,5 +381,15 @@ https://www.sveltejs.cn/tutorial/spread-props
 http://www.pythondoc.com/flask/quickstart.html
 
 # 20220523
-前后端传输编码解码
+## 前后端传输编码解码
 https://blog.csdn.net/oopxiajun2011/article/details/117123843
+
+## d3 配色方案——配合二位数组，散列化颜色强度值
+https://juejin.cn/post/7046618971021246501
+
+## librosa音频信号处理
+https://www.jianshu.com/p/8d6ffe6e10b9
+
+## d3二维数组绘图教程
+https://blog.csdn.net/zjw_python/article/details/98182540
+https://blog.csdn.net/romeo12334/article/details/83308383

@@ -25,8 +25,10 @@ export let name: string;
 import "smelte/src/tailwind.css";
 // import Player from "./components/Player.svelte";
 import PlayerWave from "./components/PlayerWave.svelte";
+import TestD3 from "./components/TestD3.svelte";
 import Test from "./components/TestD3.svelte";
 import TestNet from "./components/TestNet.svelte";
+import TestSpectrum from "./components/TestSpectrum.svelte";
 import TestWave from "./components/TestWave.svelte";
 import UploadMusic from "./components/UploadMusic.svelte";
 import {CurrentSongPath} from './stores/status'
@@ -45,6 +47,7 @@ CurrentSongPath.subscribe(value => {
     <!-- <PlayerWave/> -->
     <!-- <p>{count_value}</p> -->
     <!-- <TestNet/> -->
-    <TestWave/>
+    <!-- <TestWave/> -->
+    <TestSpectrum/>
 
 </main>
