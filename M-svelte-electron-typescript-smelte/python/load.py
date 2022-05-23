@@ -1,36 +1,43 @@
 import librosa
-from flask import Flask
-from flask_restful import Resource, Api 
+from flask import Flask,make_response
+from flask_restful import request,Api
+import json
 
 app = Flask(__name__)
 api = Api(app) 
-# class HelloWorld(Resource):    
-#     def get(self):        
-#         # y,sr=librosa.load("C:/Users/D/Desktop/test.wav")
-#         return {'hello': 'world'} 
 
-#     def post(self):
-#         print(request.headers)
-#         print(request.stream.read())
-#         return 'welcome'
+def LoadData(filepath):
+    y,sr=librosa.load(filepath)
+    # print(y)
+    # print(sr)
 
-# api.add_resource(HelloWorld, '/')
-@app.route('/')
-def hello_world():
-    return {'hello': 'world'}
+    ret=tuple(y.tolist())
+    
+    # print(ret)
+    return y
 
-@app.route('/login', methods=['POST', 'GET'])
-def login():
+@app.route('/', methods=['POST', 'GET'])
+def root():
+    return {"msg":"success"}
+
+
+@app.route('/orgdata/', methods=['POST', 'GET'])
+def orgdata():
+    if request.method == 'POST':
+        print(request.json)
+        filep=request.json['filepath']
+        print(filep)
+        # res = make_response()
+        # res.data = json.dumps({"loaddata":LoadData(filep).tolist()})
+        return json.dumps({"loaddata":LoadData(filep).tolist()})
+    return {"msg":"fail"}
+
+@app.route('/spectrum/', methods=['POST', 'GET'])
+def spectrum():
     error = None
     if request.method == 'POST':
-        if valid_login(request.form['username'],
-                       request.form['password']):
-            return log_the_user_in(request.form['username'])
-        else:
-            error = 'Invalid username/password'
-    # the code below this is executed if the request method
-    # was GET or the credentials were invalid
-    return 'noerror'
+        print(request.form['name'])
+    return {"msg":"success"}
 
 if __name__ == '__main__':    
     app.run(debug=True,port=6005)
