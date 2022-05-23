@@ -5,7 +5,18 @@
     let orgDataLenFreq:number|undefined|null;
     let orgDataLenTime:number|undefined|null;
     let orgDataIdx:number[]|undefined|null;
-    let orgDataCircle:number[][]=[];
+    let orgDataCircle:number[][][]=[];
+
+    var a = d3.rgb(255,204,255);     
+    var b = d3.rgb(238,238,0);   
+    var compute = d3.interpolate(a,b);      
+
+    let maxAmp:number=-100;
+    let minAmp:number=100;
+    
+    
+    let linear:any;
+
 
     function handleFileUploaded(e:Event){
         const target = e.target as HTMLInputElement;
@@ -35,25 +46,41 @@
             }
         }).then((res) => {
             return res.json().then((response) => {
-                console.log(response["loaddata"]);
+                // console.log(response["loaddata"]);
                 orgData=response["loaddata"];
-                orgDataLenFreq=orgData.length;
-                orgDataLenTime=orgData[0].length;
+                orgDataLenFreq=orgData.length; //1024
+                orgDataLenTime=orgData[0].length; //625
 
-                orgDataIdx=new Array<number>(orgDataLen);
-                for(var i=0;i<orgDataLen;i++)
+                orgDataIdx=new Array<number>(orgDataLenTime);
+                for(var i=0;i<orgDataLenTime;i++)
                 {   
                     orgDataIdx[i]=i;
                 }
 
-                for(var i=0;i<orgDataLen;i++)
+                for(var i=0;i<orgDataLenTime;i++)
                 {   
-                    let temp:any=new Array(2);
-                    temp[1]=orgData[i];
-                    temp[0]=orgDataIdx[i];
-                    orgDataCircle.push(temp);
+                    for(var j=0;j<orgDataLenFreq;j++)
+                    {
+                        let temp:any=new Array(3);
+                        temp[0]=i;
+                        temp[1]=j;
+                        let num=orgData[i][j];
+                        if(num==undefined)
+                            temp[2]=0;
+                        else
+                            temp[2]=Math.abs(num);
+                            if(num>maxAmp)
+                                maxAmp=num
+                            if(num<minAmp)
+                                minAmp=num
+                        // console.log(temp[2]);
+                        orgDataCircle.push(temp);
+                    }   
+                    
                 }               
-                // drawSVG();
+                // console.log(orgDataCircle.length,orgDataCircle[0].length)
+                linear = d3.scaleLinear().domain([0, maxAmp]).range([0, 1])
+                drawSVG();
         });
       })
       .catch((error) => {
@@ -61,11 +88,6 @@
       });
     }
 
-
-    // var data = [[0.5, 0.5],[0.7, 0.8],[0.4, 0.9],
-    // [0.11, 0.32],[0.88, 0.25],[0.75, 0.12],
-    // [0.5, 0.1],[0.2, 0.3],[0.4, 0.1]];
-    
     var _width = 1500, height = 800;
     var margin = { top: 40, right: 40, bottom: 800, left: 40 };
 
@@ -73,28 +95,32 @@
     var height = width;
 
     function drawSVG(){
+        console.log("color");
+        // var temparr=[];
+        // for(var i=0;i<orgDataLenTime;i++)
+        // {   
+        //     for(var j=0;j<orgDataLenFreq;j++)
+        //     {
+        //         temparr.push(orgData[i][j]);
+        //     }            
+        // }   
+        // console.log(temparr);
+        // let arr=[0.2,0.6]
+        // console.log(compute(arr));
         var svg = d3.select('#mychart')
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
 
-
+        var xScale = d3.scaleLinear()
+            .domain([0, orgDataLenTime])
+            .range([0, 800]);
         var yScale = d3.scaleLinear()
-            .domain([-1, 1])
+            .domain([0, orgDataLenFreq])
             .range([0, 500])
 
-        var xScale = d3.scaleLinear()
-            .domain([-1000, orgDataLen+1000])
-            .range([0, 800]);
-
-
-
-        var xAxis = d3.axisTop(xScale)
-        
-        // yScale.range([1, 0]);  // 重新设置y轴比例尺的值域,与原来的相反
-        
+        var xAxis = d3.axisTop(xScale)        
         var yAxis = d3.axisLeft(yScale)
-
 
         svg.append("g").attr("class", "axis")
                 .attr("transform", "translate("+ margin.left +","+ (height - margin.bottom) +")")
@@ -115,8 +141,11 @@
             .attr("cy", function(d) {
                     return  yScale(d[1])+ (height - margin.bottom - 1)
             })
-            .attr("r", 1)
-            .attr("fill", "rgb(0,0,255)");
+            .attr("r", 4)
+            // .attr("fill", "rgb(0,0,255)")
+            .style("fill",function(d){  
+                    return compute(linear(d[2]));  
+                });
     }    
 </script>
 
