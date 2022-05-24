@@ -393,3 +393,13 @@ https://www.jianshu.com/p/8d6ffe6e10b9
 ## d3二维数组绘图教程
 https://blog.csdn.net/zjw_python/article/details/98182540
 https://blog.csdn.net/romeo12334/article/details/83308383
+
+# 20220524
+## d3颜色插值两种方法：线性插值、阈值插值
+https://www.jianshu.com/p/b757a22a9aad
+
+## 目前设计的主要模块：
+case1： 波形、过零率、频谱质心、knn
+case2： 波形、频谱图、cnn
+
+上传文件、获取总时长，用户输入她希望的起始秒和结束秒，后续操作将会在这些秒内的音频采样点上处理

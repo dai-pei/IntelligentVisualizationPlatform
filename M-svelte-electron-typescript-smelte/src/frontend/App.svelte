@@ -29,7 +29,9 @@ import TestD3 from "./components/TestD3.svelte";
 import Test from "./components/TestD3.svelte";
 import TestNet from "./components/TestNet.svelte";
 import TestSpectrum from "./components/TestSpectrum.svelte";
+import TestTransmition from "./components/TestTransmition.svelte";
 import TestWave from "./components/TestWave.svelte";
+import TestZero from "./components/TestZero.svelte";
 import UploadMusic from "./components/UploadMusic.svelte";
 import {CurrentSongPath} from './stores/status'
 let count_value:any;
@@ -48,6 +50,8 @@ CurrentSongPath.subscribe(value => {
     <!-- <p>{count_value}</p> -->
     <!-- <TestNet/> -->
     <!-- <TestWave/> -->
-    <TestSpectrum/>
+    <!-- <TestSpectrum/> -->
+    <!-- <TestTransmition/> -->
+    <TestZero/>
 
 </main>

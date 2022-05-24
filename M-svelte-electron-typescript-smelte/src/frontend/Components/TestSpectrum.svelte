@@ -7,9 +7,13 @@
     let orgDataIdx:number[]|undefined|null;
     let orgDataCircle:number[][][]=[];
 
-    var a = d3.rgb(255,204,255);     
-    var b = d3.rgb(238,238,0);   
-    var compute = d3.interpolate(a,b);      
+    var a = d3.rgb(0,0,0);     
+    var b = d3.rgb(255,255,255);   
+    var compute = d3.interpolate("purple","yellow");      
+    // var colorRange=d3.range(6).map(function(i) { return "q" + i + "-6"; });
+    // var threshold=d3.scaleThreshold()//阈值比例尺
+    //         .domain([10,20,30,40,50])
+    //         .range(colorRange);
 
     let maxAmp:number=-100;
     let minAmp:number=100;
@@ -46,7 +50,7 @@
             }
         }).then((res) => {
             return res.json().then((response) => {
-                // console.log(response["loaddata"]);
+                console.log(response["loaddata"]);
                 orgData=response["loaddata"];
                 orgDataLenFreq=orgData.length; //1024
                 orgDataLenTime=orgData[0].length; //625
@@ -57,6 +61,7 @@
                     orgDataIdx[i]=i;
                 }
 
+                console.log(orgDataLenFreq,orgDataLenTime);
                 for(var i=0;i<orgDataLenTime;i++)
                 {   
                     for(var j=0;j<orgDataLenFreq;j++)
@@ -64,7 +69,8 @@
                         let temp:any=new Array(3);
                         temp[0]=i;
                         temp[1]=j;
-                        let num=orgData[i][j];
+                        // console.log(i,j)
+                        let num:number|undefined|null=orgData[j][i];
                         if(num==undefined)
                             temp[2]=0;
                         else
@@ -117,7 +123,7 @@
             .range([0, 800]);
         var yScale = d3.scaleLinear()
             .domain([0, orgDataLenFreq])
-            .range([0, 500])
+            .range([800, 0])
 
         var xAxis = d3.axisTop(xScale)        
         var yAxis = d3.axisLeft(yScale)
@@ -131,21 +137,46 @@
                 .call(yAxis);
 
 
-        svg.selectAll("circle")  
+        // svg.selectAll("circle")  
+        //     .data(orgDataCircle)
+        //     .enter()
+        //     .append("circle")
+        //     .attr("cx", function(d) {
+        //             return margin.left + xScale(d[0]);
+        //     })
+        //     .attr("cy", function(d) {
+        //             return  yScale(d[1])+ (height - margin.bottom - 1)
+        //     })
+        //     .attr("r", 4)
+        //     // .attr("fill", "rgb(0,0,255)")
+        //     .style("fill",function(d){  
+        //             return compute(linear(d[2]));  
+        //         });
+        svg.selectAll("rect")  
             .data(orgDataCircle)
             .enter()
-            .append("circle")
-            .attr("cx", function(d) {
+            .append("rect")
+            .attr("x", function(d) {
                     return margin.left + xScale(d[0]);
             })
-            .attr("cy", function(d) {
-                    return  yScale(d[1])+ (height - margin.bottom - 1)
-            })
-            .attr("r", 4)
-            // .attr("fill", "rgb(0,0,255)")
+            .attr("y", function(d) {
+                    return  yScale(d[1])+ (height - margin.bottom)
+                    })
+            .attr('width', 10)
+            .attr('height',10)
             .style("fill",function(d){  
+                    // return threshold(d[2]);  
                     return compute(linear(d[2]));  
                 });
+            // .on("mousedown", function(d,i){
+            //     console.log("这里是添加交互的内容");
+            //     d3.select(this)
+            //         .transition(300)
+            //         .style("fill", "black");
+            //         d3.select(this) //在传给任何D3方法的匿名函数中，如果想操作当前元素，只要引用this就行
+            //  })
+            // })
+            
     }    
 </script>
 
@@ -155,3 +186,14 @@
     <input type = "file" on:change = {handleFileUploaded}/> 
     <div id="mychart"></div>
 </body>
+
+<style>
+    /* .q0-6{fill:rgb(165,0,38)}
+    .q1-6{fill:rgb(215,48,39)}
+    .q2-6{fill:rgb(244,109,67)}
+    .q3-6{fill:rgb(253,174,97)}
+    .q4-6{fill:rgb(254,224,139)}
+    .q5-6{fill:rgb(255,255,191)} */
+    svg text　{pointer-event:none;}
+
+</style>

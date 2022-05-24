@@ -118,8 +118,14 @@
             .attr("cy", function(d) {
                     return  yScale(d[1])+ (height - margin.bottom - 1)
             })
-            .attr("r", 1)
-            .attr("fill", "rgb(0,0,255)");
+            .attr("r", 5)
+            .attr("fill", "rgb(0,0,255)")
+            .on("mousedown", function(d,i){
+                console.log("这里是添加交互的内容");
+                d3.select(this)
+                    .style("fill", "black");
+                    d3.select(this) //在传给任何D3方法的匿名函数中，如果想操作当前元素，只要引用this就行
+             });
     }
     onMount(()=>{       
 

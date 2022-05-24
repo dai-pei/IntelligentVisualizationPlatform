@@ -3,7 +3,7 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 
-y,sr=librosa.load('C:\\Users\\D\\Desktop\\test.wav')
+y,sr=librosa.load('C:\\Users\\WINDOWS10\\Desktop\\dai-lab-workspace\\IntelligentVisualizationPlatform\\M-svelte-electron-typescript-smelte\\public\\medias\\drum.wav')
 # stft参数配置
 # https://blog.csdn.net/sinat_35821976/article/details/105739909
 S = np.abs(librosa.stft(y,n_fft=2048,window='hann'))
