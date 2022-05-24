@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {CurrentSongPath} from '../stores/status';
+    // import {CurrentSongPath} from '../stores/status';
     // import { onMount } from 'svelte';
     // import * as d3 from 'd3';
     // let el: any;
@@ -27,7 +27,7 @@
                 return;
             }
     
-            CurrentSongPath.set(file.name)
+            // CurrentSongPath.set(file.name)
             console.log(file.name)
         }
     

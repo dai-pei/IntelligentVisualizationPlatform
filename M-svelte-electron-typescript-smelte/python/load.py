@@ -1,3 +1,4 @@
+from copyreg import constructor
 import librosa
 import numpy as np
 from flask import Flask,make_response
@@ -12,6 +13,7 @@ def LoadOrgData(filepath):
     return y
 
 def LoadSpecData(filepath):
+    print("load spec data: ",filepath)
     y,sr=librosa.load(filepath)
     y=y[:250000]
     S = np.abs(librosa.stft(y,n_fft=2048,window='hann'))
@@ -21,7 +23,7 @@ def LoadSpecData(filepath):
 def LoadZeroCrossingRate(filepath):
     y,sr=librosa.load(filepath)
     # y=y[:250000]
-    zcrs = librosa.feature.zero_crossing_rate(x)
+    zcrs = librosa.feature.zero_crossing_rate(y)
     print(zcrs.shape)
     return zcrs
 

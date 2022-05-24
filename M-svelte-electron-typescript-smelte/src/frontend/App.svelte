@@ -33,11 +33,11 @@ import TestTransmition from "./components/TestTransmition.svelte";
 import TestWave from "./components/TestWave.svelte";
 import TestZero from "./components/TestZero.svelte";
 import UploadMusic from "./components/UploadMusic.svelte";
-import {CurrentSongPath} from './stores/status'
-let count_value:any;
-CurrentSongPath.subscribe(value => {
-		count_value = value;
-	})
+// import {CurrentSongPath} from './stores/status'
+// let count_value:any;
+// CurrentSongPath.subscribe(value => {
+// 		count_value = value;
+// 	})
 </script>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -50,7 +50,7 @@ CurrentSongPath.subscribe(value => {
     <!-- <p>{count_value}</p> -->
     <!-- <TestNet/> -->
     <!-- <TestWave/> -->
-    <!-- <TestSpectrum/> -->
+    <TestSpectrum/>
     <!-- <TestTransmition/> -->
     <TestZero/>
 

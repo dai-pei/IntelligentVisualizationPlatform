@@ -1,6 +1,6 @@
 <script lang='ts'>
     import * as d3 from 'd3';
-    let filePath: any;
+    import {filePath} from '../stores/status'
     let orgData:number[]|undefined|null;
     let orgDataLenFreq:number|undefined|null;
     let orgDataLenTime:number|undefined|null;
@@ -36,7 +36,7 @@
             return;
         }
 
-        filePath=file.path
+        filePath.set(file.path)
         console.log(filePath)
     }
 
@@ -44,7 +44,7 @@
         console.log(filePath);
         fetch(`http://127.0.0.1:6005/spectrum/`, {
             method: 'post',
-            body:JSON.stringify({filepath:filePath}),
+            body:JSON.stringify({filepath:$filePath}),
             headers: {
                 'Content-Type': 'application/json'
             }
