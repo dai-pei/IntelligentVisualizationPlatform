@@ -31,8 +31,11 @@ def LoadOrgData(filepath,startsecond,endsecond):
     # print('times = %s'%times)
     startIdx=findTimeIndex(times,startsecond)
     endIdx=findTimeIndex(times,endsecond)
+    print("start idx",startIdx)
+    print("end idx",endIdx)
+    
     ret=y[startIdx:endIdx]
-    # print(ret.shape)
+    print(ret.shape)
     return ret
     # 健壮性处理，如果startSec或者endSec超出了歌曲范围（不允许）
 
@@ -46,9 +49,16 @@ def LoadSpecData(filepath):
 
 def LoadZeroCrossingRate(filepath,startsecond,endsecond):
     y=LoadOrgData(filepath,startsecond,endsecond)
-    zcrs = librosa.feature.zero_crossing_rate(y,frame_length=2048, hop_length=512, center=True)
+    # zcrs = librosa.feature.zero_crossing_rate(y=y,frame_length=2048, hop_length=512, center=True)
+    zcrs = librosa.feature.zero_crossing_rate(y)
     print(zcrs.shape)
-    return zcrs
+    return zcrs[0]
+
+def LoadSpectrumCentroid(filepath,startsecond,endsecond):
+    y=LoadOrgData(filepath,startsecond,endsecond)
+    cent = librosa.feature.zero_crossing_rate(y)
+    print(cent.shape)
+    return cent[0]
 
 def GetDuration(filepath,startsec=-1,endsec=-1):
     y,sr=librosa.load(filepath)
@@ -90,20 +100,23 @@ def zerocrossingrate():
         filep=request.json['filepath']
         startsec=request.json['startsecond']
         endsec=request.json['endsecond']
-        # print(filep)
+        print(filep,startsec,endsec)
         ret= json.dumps({"zcrs":LoadZeroCrossingRate(filep,startsec,endsec).tolist()})
         # print(ret)
         return ret
     return {"msg":"fail"}
 
-@app.route('/duration2/', methods=['POST', 'GET'])
-def duration2():
+@app.route('/spectrumcentroid/', methods=['POST', 'GET'])
+def spectrumcentroid():
     error=None
     if request.method == 'POST':
         filep=request.json['filepath']
         startsec=request.json['startsecond']
         endsec=request.json['endsecond']
-        return json.dumps({"duration":GetDuration(filep,startsec,endsec).tolist()})
+        print(filep,startsec,endsec)
+        ret= json.dumps({"cent":LoadSpectrumCentroid(filep,startsec,endsec).tolist()})
+        # print(ret)
+        return ret
     return {"msg":"fail"}
 
 @app.route('/duration/', methods=['POST', 'GET'])

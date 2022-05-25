@@ -420,3 +420,6 @@ bug描述：先输入一个大的end second，画完图，再输入一个小的�
 但如果是先输入小的，画图；再输入大的画图，则更新并没有问题
 ![先大后小有问题](img/duration0.2.png)
 ![先大后小有问题](img/duration1.0.png)
+
+## librosa音频分析
+https://blog.csdn.net/qq_44250700/article/details/119685358

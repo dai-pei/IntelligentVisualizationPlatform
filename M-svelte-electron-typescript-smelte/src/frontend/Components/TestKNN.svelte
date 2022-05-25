@@ -5,7 +5,7 @@
     let tempstartSecond:number=-1;
     let tempendSecond:number=-1;
 
-    let orgDatazcrs:any;
+    let orgDatacent:any;
     let orgDataLen:number;
     let orgDataCircle:number[][]=[];
     let orgDataIdx:number[];
@@ -24,10 +24,10 @@
         tempendSecond=value;
     })
 
-    function requestZeroCrossingRate()
+    function requestSpectrumCentroid()
     {
         console.log(filePath);
-        fetch(`http://127.0.0.1:6005/zerocrossingrate/`, {
+        fetch(`http://127.0.0.1:6005/spectrumcentroid/`, {
             method: 'post',
             body:JSON.stringify({filepath:tempfilePath,startsecond:tempstartSecond,endsecond:tempendSecond}),
             headers: {
@@ -35,23 +35,22 @@
             }
         }).then((res) => {
             return res.json().then((response) => {
-                // console.log("response",response);
-                orgDatazcrs=response['zcrs'];
-                console.log("zcrs: ",orgDatazcrs);
-                console.log("zcrs: ",orgDatazcrs[5],orgDatazcrs[10]);         
+                orgDatacent=response['cent'];
+                console.log("cent: ",orgDatacent);
+                // console.log("zcrs: ",orgDatacent[5],orgDatacent[10]);         
                 initVariables();
-                drawZeroCrossingRate();       
+                drawSpectrumCentroid();       
         });
       })
       .catch((error) => {
         console.error(error);
       });
-      console.log("end of function request zcrs function")
+      console.log("end of function request spec cent function")
     }
 
     function initVariables(){
         console.log("function initVariables")
-        orgDataLen=orgDatazcrs.length;
+        orgDataLen=orgDatacent.length;
         orgDataIdx=new Array<number>(orgDataLen);
 
         for(var i=0;i<orgDataLen;i++)
@@ -61,26 +60,23 @@
         for(var i=0;i<orgDataLen;i++)
         {   
             let temp:any=new Array(2);
-            if(orgDatazcrs[i]==null || orgDatazcrs[i]==undefined)
+            if(orgDatacent[i]==null || orgDatacent[i]==undefined)
                 temp[1]=0;
             else
-                temp[1]=orgDatazcrs[i];
+                temp[1]=orgDatacent[i];
             temp[0]=orgDataIdx[i];
             orgDataCircle.push(temp);
         }                  
     }
 
-    // 过零率就是每一帧内过零点的数量除以帧内总样本数量
-    function drawZeroCrossingRate(){        
-        d3.select('#zerocrossingrate').selectAll('*').remove();
+    function drawSpectrumCentroid(){        
+        d3.select('#spectrumcentroid').selectAll('*').remove();
         d3.select("g").selectAll('*').remove();
 
-        var svg = d3.select('#zerocrossingrate')
+        var svg = d3.select('#spectrumcentroid')
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
-            
-        // svg.selectAll("*").remove();
 
         var xScale = d3.scaleLinear()
             .domain([0, orgDataLen+orgDataLen/10])
@@ -114,35 +110,16 @@
             .attr("r", 5)
             .attr("fill", "rgb(0,0,255)");
 
-
-        // 折线图
-        // var linePath=d3.line()//创建一个直线生成器
-        //     .x(function(d){
-        //         return xScale(d[0]);
-        //     })
-        //     .y(function(d){
-        //         return yScale(d[1]);
-        //     });
-                
-                
-        // var colors=[d3.rgb(0,0,255),d3.rgb(0,255,0)];
-        // svg.selectAll("path")
-        //     .data(orgDataCircle)
-        //     .enter()
-        //     .append("path")
-        //     .attr("transform","translate("+margin.left+","+margin.bottom+")")
-        //     .attr("d",function(d){
-        //         return linePath(d);
-        //         //返回线段生成器得到的路径
-        //     })
-        //     .attr("fill","read")
-        //     .attr("stroke-width",3);
-
-
     }
 </script>
 
 <body>
+    <form>
+        <span>
+            
+        </span>
+        <input type="file" multiple="multiple"/>
+    </form>
     <form>
         <span>
             svgWidth:
@@ -153,6 +130,6 @@
         </span>
         <input type="text" bind:value={height}/>
     </form>
-    <button on:click = {requestZeroCrossingRate} > load zcrs </button>    
-    <div id="zerocrossingrate"></div>
+    <button on:click = {requestSpectrumCentroid} > load cent </button>    
+    <div id="spectrumcentroid"></div>
 </body>

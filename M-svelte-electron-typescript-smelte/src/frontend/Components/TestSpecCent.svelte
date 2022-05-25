@@ -1,199 +1,129 @@
 <script lang='ts'>
     import * as d3 from 'd3';
-    let filePath: any;
-    let orgData:number[]|undefined|null;
-    let orgDataLenFreq:number|undefined|null;
-    let orgDataLenTime:number|undefined|null;
-    let orgDataIdx:number[]|undefined|null;
-    let orgDataCircle:number[][][]=[];
+    import {filePath,startSecond,endSecond,} from '../stores/status';
+    let tempfilePath:any;
+    let tempstartSecond:number=-1;
+    let tempendSecond:number=-1;
 
-    var a = d3.rgb(0,0,0);     
-    var b = d3.rgb(255,255,255);   
-    var compute = d3.interpolate("purple","yellow");      
-    // var colorRange=d3.range(6).map(function(i) { return "q" + i + "-6"; });
-    // var threshold=d3.scaleThreshold()//阈值比例尺
-    //         .domain([10,20,30,40,50])
-    //         .range(colorRange);
+    let orgDatacent:any;
+    let orgDataLen:number;
+    let orgDataCircle:number[][]=[];
+    let orgDataIdx:number[];
 
-    let maxAmp:number=-100;
-    let minAmp:number=100;
-    
-    
-    let linear:any;
+    let width:number=1000
+    let height:number=1000 
+    var margin = { top: 40, right: 40, bottom: 40, left: 40 };
 
+    filePath.subscribe(value=>{
+        tempfilePath=value;
+    })   
+    startSecond.subscribe(value=>{
+        tempstartSecond=value;
+    })
+    endSecond.subscribe(value=>{
+        tempendSecond=value;
+    })
 
-    function handleFileUploaded(e:Event){
-        const target = e.target as HTMLInputElement;
-        const files = target.files;
-        if (!files) {
-            console.log(1);
-            return;
-        }
-
-        const file = files[0];
-        if (!file) {
-            console.log(2);
-            return;
-        }
-
-        filePath=file.path
-        console.log(filePath)
-    }
-
-    async function requestLoadData() {
+    function requestSpectrumCentroid()
+    {
         console.log(filePath);
-        fetch(`http://127.0.0.1:6005/spectrum/`, {
+        fetch(`http://127.0.0.1:6005/spectrumcentroid/`, {
             method: 'post',
-            body:JSON.stringify({filepath:filePath}),
+            body:JSON.stringify({filepath:tempfilePath,startsecond:tempstartSecond,endsecond:tempendSecond}),
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
             return res.json().then((response) => {
-                console.log(response["loaddata"]);
-                orgData=response["loaddata"];
-                orgDataLenFreq=orgData.length; //1024
-                orgDataLenTime=orgData[0].length; //625
-
-                orgDataIdx=new Array<number>(orgDataLenTime);
-                for(var i=0;i<orgDataLenTime;i++)
-                {   
-                    orgDataIdx[i]=i;
-                }
-
-                console.log(orgDataLenFreq,orgDataLenTime);
-                for(var i=0;i<orgDataLenTime;i++)
-                {   
-                    for(var j=0;j<orgDataLenFreq;j++)
-                    {
-                        let temp:any=new Array(3);
-                        temp[0]=i;
-                        temp[1]=j;
-                        // console.log(i,j)
-                        let num:number|undefined|null=orgData[j][i];
-                        if(num==undefined)
-                            temp[2]=0;
-                        else
-                            temp[2]=Math.abs(num);
-                            if(num>maxAmp)
-                                maxAmp=num
-                            if(num<minAmp)
-                                minAmp=num
-                        // console.log(temp[2]);
-                        orgDataCircle.push(temp);
-                    }   
-                    
-                }               
-                // console.log(orgDataCircle.length,orgDataCircle[0].length)
-                linear = d3.scaleLinear().domain([0, maxAmp]).range([0, 1])
-                drawSVG();
+                orgDatacent=response['cent'];
+                console.log("cent: ",orgDatacent);
+                // console.log("zcrs: ",orgDatacent[5],orgDatacent[10]);         
+                initVariables();
+                drawSpectrumCentroid();       
         });
       })
       .catch((error) => {
         console.error(error);
       });
+      console.log("end of function request spec cent function")
     }
 
-    var _width = 1500, height = 800;
-    var margin = { top: 40, right: 40, bottom: 800, left: 40 };
+    function initVariables(){
+        console.log("function initVariables")
+        orgDataLen=orgDatacent.length;
+        orgDataIdx=new Array<number>(orgDataLen);
 
-    var width = _width - margin.left - margin.right;
-    var height = width;
+        for(var i=0;i<orgDataLen;i++)
+        {   
+            orgDataIdx[i]=i;
+        }
+        for(var i=0;i<orgDataLen;i++)
+        {   
+            let temp:any=new Array(2);
+            if(orgDatacent[i]==null || orgDatacent[i]==undefined)
+                temp[1]=0;
+            else
+                temp[1]=orgDatacent[i];
+            temp[0]=orgDataIdx[i];
+            orgDataCircle.push(temp);
+        }                  
+    }
 
-    function drawSVG(){
-        console.log("color");
-        // var temparr=[];
-        // for(var i=0;i<orgDataLenTime;i++)
-        // {   
-        //     for(var j=0;j<orgDataLenFreq;j++)
-        //     {
-        //         temparr.push(orgData[i][j]);
-        //     }            
-        // }   
-        // console.log(temparr);
-        // let arr=[0.2,0.6]
-        // console.log(compute(arr));
-        var svg = d3.select('#mychart')
+    function drawSpectrumCentroid(){        
+        d3.select('#spectrumcentroid').selectAll('*').remove();
+        d3.select("g").selectAll('*').remove();
+
+        var svg = d3.select('#spectrumcentroid')
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
 
         var xScale = d3.scaleLinear()
-            .domain([0, orgDataLenTime])
-            .range([0, 800]);
-        var yScale = d3.scaleLinear()
-            .domain([0, orgDataLenFreq])
-            .range([800, 0])
+            .domain([0, orgDataLen+orgDataLen/10])
+            .range([0, 500]);
 
-        var xAxis = d3.axisTop(xScale)        
+        var yScale = d3.scaleLinear()
+            .domain([0, 0.03])
+            .range([0, 500])
+
+        var xAxis = d3.axisTop(xScale)
+        yScale.range([500, 0]);  // 重新设置y轴比例尺的值域,与原来的相反        
         var yAxis = d3.axisLeft(yScale)
 
         svg.append("g").attr("class", "axis")
-                .attr("transform", "translate("+ margin.left +","+ (height - margin.bottom) +")")
+                .attr("transform", "translate("+ margin.left +","+ (margin.bottom+500) +")")
                 .call(xAxis);
-
         svg.append("g").attr("class", "axis")
-                .attr("transform", "translate("+ margin.left +","+ (height - margin.bottom - 1) +")")
+                .attr("transform", "translate("+ margin.left +","+ margin.bottom +")")
                 .call(yAxis);
 
-
-        // svg.selectAll("circle")  
-        //     .data(orgDataCircle)
-        //     .enter()
-        //     .append("circle")
-        //     .attr("cx", function(d) {
-        //             return margin.left + xScale(d[0]);
-        //     })
-        //     .attr("cy", function(d) {
-        //             return  yScale(d[1])+ (height - margin.bottom - 1)
-        //     })
-        //     .attr("r", 4)
-        //     // .attr("fill", "rgb(0,0,255)")
-        //     .style("fill",function(d){  
-        //             return compute(linear(d[2]));  
-        //         });
-        svg.selectAll("rect")  
+        svg.selectAll("circle")  
             .data(orgDataCircle)
             .enter()
-            .append("rect")
-            .attr("x", function(d) {
+            .append("circle")
+            .attr("cx", function(d) {
                     return margin.left + xScale(d[0]);
             })
-            .attr("y", function(d) {
-                    return  yScale(d[1])+ (height - margin.bottom)
-                    })
-            .attr('width', 10)
-            .attr('height',10)
-            .style("fill",function(d){  
-                    // return threshold(d[2]);  
-                    return compute(linear(d[2]));  
-                });
-            // .on("mousedown", function(d,i){
-            //     console.log("这里是添加交互的内容");
-            //     d3.select(this)
-            //         .transition(300)
-            //         .style("fill", "black");
-            //         d3.select(this) //在传给任何D3方法的匿名函数中，如果想操作当前元素，只要引用this就行
-            //  })
-            // })
-            
-    }    
+            .attr("cy", function(d) {
+                    return  yScale(d[1]) + margin.bottom;
+            })
+            .attr("r", 5)
+            .attr("fill", "rgb(0,0,255)");
+
+    }
 </script>
 
 <body>
-    <button on:click = {requestLoadData} > load data </button>
-    
-    <input type = "file" on:change = {handleFileUploaded}/> 
-    <div id="mychart"></div>
+    <form>
+        <span>
+            svgWidth:
+        </span>
+        <input type="text" bind:value={width}/>
+        <span>
+            svgHeight:
+        </span>
+        <input type="text" bind:value={height}/>
+    </form>
+    <button on:click = {requestSpectrumCentroid} > load cent </button>    
+    <div id="spectrumcentroid"></div>
 </body>
-
-<style>
-    /* .q0-6{fill:rgb(165,0,38)}
-    .q1-6{fill:rgb(215,48,39)}
-    .q2-6{fill:rgb(244,109,67)}
-    .q3-6{fill:rgb(253,174,97)}
-    .q4-6{fill:rgb(254,224,139)}
-    .q5-6{fill:rgb(255,255,191)} */
-    svg text　{pointer-event:none;}
-
-</style>
