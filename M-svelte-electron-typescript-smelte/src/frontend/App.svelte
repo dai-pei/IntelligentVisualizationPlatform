@@ -27,6 +27,7 @@ import "smelte/src/tailwind.css";
 import PlayerWave from "./components/PlayerWave.svelte";
 import TestD3 from "./components/TestD3.svelte";
 import Test from "./components/TestD3.svelte";
+import TestDuration from "./components/TestDuration.svelte";
 import TestNet from "./components/TestNet.svelte";
 import TestSpectrum from "./components/TestSpectrum.svelte";
 import TestTransmition from "./components/TestTransmition.svelte";
@@ -49,9 +50,13 @@ import UploadMusic from "./components/UploadMusic.svelte";
     <!-- <PlayerWave/> -->
     <!-- <p>{count_value}</p> -->
     <!-- <TestNet/> -->
-    <!-- <TestWave/> -->
-    <TestSpectrum/>
+    <!-- <TestSpectrum/> -->
     <!-- <TestTransmition/> -->
+    <TestDuration/>
+    <p>
+        ------------------------------------------<br><br>
+    </p>
+    <!-- <TestWave/> -->
     <TestZero/>
 
 </main>

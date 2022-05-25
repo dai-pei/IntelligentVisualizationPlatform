@@ -403,3 +403,20 @@ case1： 波形、过零率、频谱质心、knn
 case2： 波形、频谱图、cnn
 
 上传文件、获取总时长，用户输入她希望的起始秒和结束秒，后续操作将会在这些秒内的音频采样点上处理
+
+# 20220525
+## svelte响应式声明
+https://blog.csdn.net/ramblerviper/article/details/124923052
+// function printfile(){
+//         $: if ( $filePath.length != 0) {
+//         console.log($filePath);
+//     }
+// }
+
+
+## 开发bug testwave.svelte
+bug描述：先输入一个大的end second，画完图，再输入一个小的，更新画图
+则小的end second画出来的图自动被拉宽了，圆点和x轴的刻度无法对应
+但如果是先输入小的，画图；再输入大的画图，则更新并没有问题
+![先大后小有问题](img/duration0.2.png)
+![先大后小有问题](img/duration1.0.png)

@@ -1,4 +1,3 @@
-from copyreg import constructor
 import librosa
 import numpy as np
 from flask import Flask,make_response
@@ -8,9 +7,34 @@ import json
 app = Flask(__name__)
 api = Api(app) 
 
-def LoadOrgData(filepath):
+def findTimeIndex(times,second):
+    prevEle=0
+    secondIdx=-1
+    # print(second.type)
+    # print(second)
+    second=float(second)
+    for idx,ele in enumerate(times):
+        # print(idx)
+        # print(ele)
+        if prevEle<=second and ele>=second:
+            secondIdx=idx
+            break
+        prevEle=ele
+    # print(secondIdx)
+    return secondIdx
+
+def LoadOrgData(filepath,startsecond,endsecond):
     y,sr=librosa.load(filepath)
-    return y
+    samples = librosa.samples_like(y,hop_length=1)
+    # print('samples = %s'%samples)
+    times = librosa.frames_to_time(samples,sr=sr,hop_length=1)
+    # print('times = %s'%times)
+    startIdx=findTimeIndex(times,startsecond)
+    endIdx=findTimeIndex(times,endsecond)
+    ret=y[startIdx:endIdx]
+    # print(ret.shape)
+    return ret
+    # 健壮性处理，如果startSec或者endSec超出了歌曲范围（不允许）
 
 def LoadSpecData(filepath):
     print("load spec data: ",filepath)
@@ -20,10 +44,9 @@ def LoadSpecData(filepath):
     S_db=librosa.power_to_db(S ** 2)
     return S_db
 
-def LoadZeroCrossingRate(filepath):
-    y,sr=librosa.load(filepath)
-    # y=y[:250000]
-    zcrs = librosa.feature.zero_crossing_rate(y)
+def LoadZeroCrossingRate(filepath,startsecond,endsecond):
+    y=LoadOrgData(filepath,startsecond,endsecond)
+    zcrs = librosa.feature.zero_crossing_rate(y,frame_length=2048, hop_length=512, center=True)
     print(zcrs.shape)
     return zcrs
 
@@ -43,10 +66,12 @@ def orgdata():
     if request.method == 'POST':
         print(request.json)
         filep=request.json['filepath']
-        print(filep)
-        # res = make_response()
-        # res.data = json.dumps({"loaddata":LoadData(filep).tolist()})
-        return json.dumps({"loaddata":LoadOrgData(filep).tolist()})
+        startsec=request.json['startsecond']
+        endsec=request.json['endsecond']
+        # print(filep,startsec,endsec)
+        ret=json.dumps({"loaddata":LoadOrgData(filep,startsec,endsec).tolist()})
+        # print(LoadOrgData(filep,startsec,endsec).shape)
+        return ret
     return {"msg":"fail"}
 
 @app.route('/spectrum/', methods=['POST', 'GET'])
@@ -58,13 +83,17 @@ def spectrum():
         return json.dumps({"loaddata":LoadSpecData(filep).tolist()})
     return {"msg":"fail"}
 
-@app.route('/zerocrossing/', methods=['POST', 'GET'])
-def zerocrossing():
+@app.route('/zerocrossingrate/', methods=['POST', 'GET'])
+def zerocrossingrate():
     error=None
     if request.method == 'POST':
         filep=request.json['filepath']
-        print(filep)
-        return json.dumps({"loaddata":LoadZeroCrossingRate(filep).tolist()})
+        startsec=request.json['startsecond']
+        endsec=request.json['endsecond']
+        # print(filep)
+        ret= json.dumps({"zcrs":LoadZeroCrossingRate(filep,startsec,endsec).tolist()})
+        # print(ret)
+        return ret
     return {"msg":"fail"}
 
 @app.route('/duration2/', methods=['POST', 'GET'])
