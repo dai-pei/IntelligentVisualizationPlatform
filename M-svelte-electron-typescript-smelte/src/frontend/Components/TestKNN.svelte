@@ -111,6 +111,16 @@
             .attr("fill", "rgb(0,0,255)");
 
     }
+
+    function handleMultiFileUploaded(e:Event){
+        const target = e.target as HTMLInputElement;
+        const files = target.files;
+        console.log(files);
+        for (var i = 0; i < files.length; i++) {
+            //打印所有的文件名
+            console.log(files[i].name);
+        }
+    }
 </script>
 
 <body>
@@ -118,13 +128,13 @@
         <span>
             
         </span>
-        <input type="file" multiple="multiple"/>
+        <input type="file" multiple="multiple" on:change={handleMultiFileUploaded}/>
     </form>
     <form>
         <span>
             svgWidth:
         </span>
-        <input type="text" bind:value={width}/>
+        <input type="text" bind:value={width} />
         <span>
             svgHeight:
         </span>

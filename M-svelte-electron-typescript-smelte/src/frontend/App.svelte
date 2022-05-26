@@ -28,6 +28,7 @@ import PlayerWave from "./components/PlayerWave.svelte";
 import TestD3 from "./components/TestD3.svelte";
 import Test from "./components/TestD3.svelte";
 import TestDuration from "./components/TestDuration.svelte";
+import TestKnn from "./components/TestKNN.svelte";
 import TestNet from "./components/TestNet.svelte";
 import TestSpecCent from "./components/TestSpecCent.svelte";
 import TestSpectrum from "./components/TestSpectrum.svelte";
@@ -59,6 +60,7 @@ import UploadMusic from "./components/UploadMusic.svelte";
     </p>
     <!-- <TestWave/> -->
     <!-- <TestZero/> -->
-    <TestSpecCent/>
+    <!-- <TestSpecCent/> -->
+    <TestKnn/>
 
 </main>
