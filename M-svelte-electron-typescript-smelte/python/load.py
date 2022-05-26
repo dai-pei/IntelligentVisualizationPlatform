@@ -1,3 +1,4 @@
+from multiprocessing.dummy import Array
 import librosa
 import numpy as np
 from flask import Flask,make_response
@@ -7,6 +8,12 @@ import json
 app = Flask(__name__)
 api = Api(app) 
 
+def GetDuration(filepath,startsec=-1,endsec=-1):
+    y,sr=librosa.load(filepath)
+    if(startsec==-1 or endsec==-1):
+        return librosa.get_duration(y,sr)
+    return 1000000
+    
 def findTimeIndex(times,second):
     prevEle=0
     secondIdx=-1
@@ -39,6 +46,10 @@ def LoadOrgData(filepath,startsecond,endsecond):
     return ret
     # 健壮性处理，如果startSec或者endSec超出了歌曲范围（不允许）
 
+def LoadOrgDataFulllLength(filepath):
+    y,sr=librosa.load(filepath)
+    return y
+
 def LoadSpecData(filepath):
     print("load spec data: ",filepath)
     y,sr=librosa.load(filepath)
@@ -56,20 +67,41 @@ def LoadZeroCrossingRate(filepath,startsecond,endsecond):
 
 def LoadSpectrumCentroid(filepath,startsecond,endsecond):
     y=LoadOrgData(filepath,startsecond,endsecond)
-    cent = librosa.feature.zero_crossing_rate(y)
+    cent = librosa.feature.spectral_centroid(y)
     print(cent.shape)
     return cent[0]
 
-def GetDuration(filepath,startsec=-1,endsec=-1):
-    y,sr=librosa.load(filepath)
-    if(startsec==-1 or endsec==-1):
-        return librosa.get_duration(y,sr)
-    return 1000000
-    
+def LoadZeroAndCentForKNN(filepathmul,classes):
+    retArr=[]
+    for filepathinfo in filepathmul:
+        # print(filepathinfo)
+
+        y=LoadOrgDataFulllLength(filepathinfo[0])
+        label=filepathinfo[1]
+        zero=librosa.feature.zero_crossing_rate(y)
+        cent = librosa.feature.spectral_centroid(y)
+        zero_max=np.max(zero[0])
+        cent_max=np.max(cent[0])
+        tempArr=[]
+        tempArr.append(zero_max)
+        tempArr.append(cent_max)
+        tempArr.append(label)
+        retArr.append(tempArr)
+
+    print(retArr)
+    return retArr
 
 @app.route('/', methods=['POST', 'GET'])
 def root():
     return {"msg":"success"}
+
+@app.route('/duration/', methods=['POST', 'GET'])
+def duration():
+    error=None
+    if request.method == 'POST':
+        filep=request.json['filepath']
+        return json.dumps({"duration":GetDuration(filep)})
+    return {"msg":"fail"}
 
 @app.route('/orgdata/', methods=['POST', 'GET'])
 def orgdata():
@@ -119,13 +151,19 @@ def spectrumcentroid():
         return ret
     return {"msg":"fail"}
 
-@app.route('/duration/', methods=['POST', 'GET'])
-def duration():
+@app.route('/zerocentmaxforknn/', methods=['POST', 'GET'])
+def zerocentmaxforknn():
     error=None
     if request.method == 'POST':
-        filep=request.json['filepath']
-        return json.dumps({"duration":GetDuration(filep)})
+        filepathmul=request.json['filepathmulti']
+        classes=request.json['classes']
+        # print(filepathmul,classes)
+        ret= json.dumps({"data":LoadZeroAndCentForKNN(filepathmul,classes)})
+        # ret= json.dumps({"cent":LoadZeroAndCentForKNN(filepathmul,classes).tolist()})
+        # print(ret)
+        return ret
     return {"msg":"fail"}
+
 
 if __name__ == '__main__':    
     app.run(debug=True,port=6005)

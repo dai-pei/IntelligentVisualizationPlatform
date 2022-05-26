@@ -1,45 +1,44 @@
 <script lang='ts'>
     import * as d3 from 'd3';
-    import {filePath,startSecond,endSecond,} from '../stores/status';
-    let tempfilePath:any;
-    let tempstartSecond:number=-1;
-    let tempendSecond:number=-1;
+    import {filePathMulti} from '../stores/status';
+    let tempfilePathMulti:any;
+    let classArr=["Tom","close"];
+    let classArrList=["close","open","crash","kick","ride","snare","Tom"]
 
-    let orgDatacent:any;
+    let orgDataKNN:any;
     let orgDataLen:number;
     let orgDataCircle:number[][]=[];
     let orgDataIdx:number[];
+
+    // 最多只支持7种类别的区分
+    var colorName = ["red", "blue", "green", "yellow", "black","purple","orange"];
+
 
     let width:number=1000
     let height:number=1000 
     var margin = { top: 40, right: 40, bottom: 40, left: 40 };
 
-    filePath.subscribe(value=>{
-        tempfilePath=value;
+    filePathMulti.subscribe(value=>{
+        tempfilePathMulti=value;
     })   
-    startSecond.subscribe(value=>{
-        tempstartSecond=value;
-    })
-    endSecond.subscribe(value=>{
-        tempendSecond=value;
-    })
 
-    function requestSpectrumCentroid()
+    function requestZeroCentMaxForKNN()
     {
-        console.log(filePath);
-        fetch(`http://127.0.0.1:6005/spectrumcentroid/`, {
+        console.log(tempfilePathMulti);
+        fetch(`http://127.0.0.1:6005/zerocentmaxforknn/`, {
             method: 'post',
-            body:JSON.stringify({filepath:tempfilePath,startsecond:tempstartSecond,endsecond:tempendSecond}),
+            body:JSON.stringify({filepathmulti:tempfilePathMulti,classes:classArr}),
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
             return res.json().then((response) => {
-                orgDatacent=response['cent'];
-                console.log("cent: ",orgDatacent);
-                // console.log("zcrs: ",orgDatacent[5],orgDatacent[10]);         
+                // console.log(response);
+                orgDataKNN=response['data'];
+                console.log("orgDataKNN: ",orgDataKNN);
+                
                 initVariables();
-                drawSpectrumCentroid();       
+                drawZeroCentKNN();       
         });
       })
       .catch((error) => {
@@ -50,7 +49,7 @@
 
     function initVariables(){
         console.log("function initVariables")
-        orgDataLen=orgDatacent.length;
+        orgDataLen=orgDataKNN.length;
         orgDataIdx=new Array<number>(orgDataLen);
 
         for(var i=0;i<orgDataLen;i++)
@@ -60,30 +59,35 @@
         for(var i=0;i<orgDataLen;i++)
         {   
             let temp:any=new Array(2);
-            if(orgDatacent[i]==null || orgDatacent[i]==undefined)
+            if(orgDataKNN[i]==null || orgDataKNN[i]==undefined)
                 temp[1]=0;
             else
-                temp[1]=orgDatacent[i];
+                temp[1]=orgDataKNN[i];
             temp[0]=orgDataIdx[i];
             orgDataCircle.push(temp);
         }                  
     }
 
-    function drawSpectrumCentroid(){        
-        d3.select('#spectrumcentroid').selectAll('*').remove();
+    function compute(classname:string){
+        let idx=classArr.findIndex(value=>value == classname);
+        return colorName[idx];
+    }
+
+    function drawZeroCentKNN(){        
+        d3.select('#zerocentknn').selectAll('*').remove();
         d3.select("g").selectAll('*').remove();
 
-        var svg = d3.select('#spectrumcentroid')
+        var svg = d3.select('#zerocentknn')
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
 
         var xScale = d3.scaleLinear()
-            .domain([0, orgDataLen+orgDataLen/10])
+            .domain([0, 1])
             .range([0, 500]);
 
         var yScale = d3.scaleLinear()
-            .domain([0, 0.03])
+            .domain([0, 6000])
             .range([0, 500])
 
         var xAxis = d3.axisTop(xScale)
@@ -98,7 +102,7 @@
                 .call(yAxis);
 
         svg.selectAll("circle")  
-            .data(orgDataCircle)
+            .data(orgDataKNN)
             .enter()
             .append("circle")
             .attr("cx", function(d) {
@@ -108,18 +112,32 @@
                     return  yScale(d[1]) + margin.bottom;
             })
             .attr("r", 5)
-            .attr("fill", "rgb(0,0,255)");
+            .style("fill", function(d){  
+                    // return threshold(d[2]);  
+                    return compute(d[2]);  
+                });
 
     }
 
     function handleMultiFileUploaded(e:Event){
         const target = e.target as HTMLInputElement;
         const files = target.files;
-        console.log(files);
+        // console.log(files);
         for (var i = 0; i < files.length; i++) {
+            let tempArr=new Array();
             //打印所有的文件名
-            console.log(files[i].name);
+            // console.log(files[i].name);
+            tempArr.push(files[i].path);
+            if(files[i].name.includes("Tom")){
+                tempArr.push("Tom");
+            }
+            else{
+                tempArr.push("close");
+            }
+            tempfilePathMulti.push(tempArr)
         }
+        filePathMulti.set(tempfilePathMulti);
+        // console.log(tempfilePathMulti);
     }
 </script>
 
@@ -140,6 +158,13 @@
         </span>
         <input type="text" bind:value={height}/>
     </form>
-    <button on:click = {requestSpectrumCentroid} > load cent </button>    
-    <div id="spectrumcentroid"></div>
+    <select multiple bind:value={classArr}>
+        {#each menu as flavour}
+            <option value={flavour}>
+                {flavour}
+            </option>
+        {/each}
+    </select>
+    <button on:click = {requestZeroCentMaxForKNN} > tom and close-hat & zcrs/cent/knn </button>    
+    <div id="zerocentknn"></div>
 </body>

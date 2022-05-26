@@ -14,3 +14,4 @@ export let orgDataLen:any=writable([]);
 export let orgDataIdx=writable([]);
 export let orgDataCircle:any=writable([]);
 
+export let filePathMulti=writable([]);

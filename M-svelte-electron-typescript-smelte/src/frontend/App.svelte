@@ -54,7 +54,8 @@ import UploadMusic from "./components/UploadMusic.svelte";
     <!-- <TestNet/> -->
     <!-- <TestSpectrum/> -->
     <!-- <TestTransmition/> -->
-    <TestDuration/>
+    
+    <!-- <TestDuration/> -->
     <p>
         ------------------------------------------<br><br>
     </p>

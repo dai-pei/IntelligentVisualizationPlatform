@@ -423,3 +423,7 @@ bug描述：先输入一个大的end second，画完图，再输入一个小的�
 
 ## librosa音频分析
 https://blog.csdn.net/qq_44250700/article/details/119685358
+
+# 20220526
+## svelte 下拉框多选
+https://www.sveltejs.cn/tutorial/multiple-select-bindings
