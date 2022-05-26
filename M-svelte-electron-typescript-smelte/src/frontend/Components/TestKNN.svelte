@@ -2,10 +2,10 @@
     import * as d3 from 'd3';
     import {filePathMulti} from '../stores/status';
     let tempfilePathMulti:any;
-    let classArr=["Tom","close"];
+    let classArr=["close"];
     let classArrList=["close","open","crash","kick","ride","snare","Tom"]
 
-    let orgDataKNN:any;
+    let orgDataKNN:any|undefined|null;
     let orgDataLen:number;
     let orgDataCircle:number[][]=[];
     let orgDataIdx:number[];
@@ -114,10 +114,55 @@
             .attr("r", 5)
             .style("fill", function(d){  
                     // return threshold(d[2]);  
-                    return compute(d[2]);  
-                });
+                    return compute(d[2])
+                })
+            // .on("mousedown", function(){
+            //     console.log("这里是添加交互的内容");
+            //     d3.select(this)
+            //         // .transition()
+            //         // .duration(500)
+            //         // .attr("r",8)
+            //         // .style("fill", "blue");
+            //     // d3.select(this)
+            //         // .append("title")
+            //         .append("p")
+            //         .text(function(){
+            //             return "aaa";
+            //         });
+            //         //d3.select(this) //在传给任何D3方法的匿名函数中，如果想操作当前元素，只要引用this就行
+            //  });
+            .on("mouseover",function(d){
+                /*
+                鼠标移入时，
+                    （1）通过 selection.html() 来更改提示框的文字
+                    （2）通过更改样式 left 和 top 来设定提示框的位置
+                    （3）设定提示框的透明度为1.0（完全不透明）
+                    */
 
+                tooltip.html(d.data[0] + "的出货量为" + "<br />" + 
+                d.data[1] + " 百万台")
+                            .style("left", (d3.event.pageX) + "px")
+                            d3.
+                            .style("top", (d3.event.pageY + 20) + "px")
+                            .style("opacity",1.0);
+                })
+                .on("mousemove",function(d){
+                /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+
+                    tooltip.style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY + 20) + "px");
+                })
+                .on("mouseout",function(d){
+                /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+
+                    tooltip.style("opacity",0.0);
+            })
     }
+
+    var tooltip = d3.select("body")
+        .append("div")
+        .attr("class","tooltip")
+        .style("opacity",0.0);
 
     function handleMultiFileUploaded(e:Event){
         const target = e.target as HTMLInputElement;
@@ -131,8 +176,20 @@
             if(files[i].name.includes("Tom")){
                 tempArr.push("Tom");
             }
-            else{
+            else if(files[i].name.includes("close")){
                 tempArr.push("close");
+            }
+            else if(files[i].name.includes("open")){
+                tempArr.push("open");
+            }
+            else if(files[i].name.includes("crash")){
+                tempArr.push("crash");
+            }
+            else if(files[i].name.includes("kick")){
+                tempArr.push("kick");
+            }
+            else if(files[i].name.includes("snare")){
+                tempArr.push("snare");
             }
             tempfilePathMulti.push(tempArr)
         }
@@ -159,12 +216,35 @@
         <input type="text" bind:value={height}/>
     </form>
     <select multiple bind:value={classArr}>
-        {#each menu as flavour}
-            <option value={flavour}>
-                {flavour}
+        {#each classArrList as chosenclass}
+            <option value={chosenclass}>
+                {chosenclass}
             </option>
         {/each}
     </select>
     <button on:click = {requestZeroCentMaxForKNN} > tom and close-hat & zcrs/cent/knn </button>    
     <div id="zerocentknn"></div>
+
+    {#if classArr.length === 0}
+        <p>Please select at least one class</p>
+    {:else}
+        <p>
+            here is chosen classes:{classArr}
+        </p>
+    {/if}
 </body>
+
+<style>
+    .tooltip{
+        position: absolute;
+        width: 120;
+        height: auto;
+        font-family: simsun;
+        font-size: 14px;
+        text-align: center;
+        border-style: solid; 
+        border-width: 1px;
+        background-color: white;
+        border-radius: 5px;
+    }
+</style>
