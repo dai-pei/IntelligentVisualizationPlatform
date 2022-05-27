@@ -1,5 +1,6 @@
 <script lang='ts'>
     import * as d3 from 'd3';
+    import Button from "smelte/src/components/Button";
     import {filePathMulti} from '../stores/status';
     let tempfilePathMulti:any;
     let classArr=["close"];
@@ -205,10 +206,7 @@
 </script>
 
 <body>
-    <form>
-        <span>
-            
-        </span>
+        <form>
         <input type="file" multiple="multiple" on:change={handleMultiFileUploaded}/>
     </form>
     <form>
@@ -228,7 +226,7 @@
             </option>
         {/each}
     </select>
-    <button on:click = {requestZeroCentMaxForKNN} > tom and close-hat & zcrs/cent/knn </button>    
+    <Button color="secondary" light block on:click={requestZeroCentMaxForKNN}>zcrs/cent/knn</Button>
     <div id="zerocentknn"></div>
 
     {#if classArr.length === 0}
@@ -239,19 +237,3 @@
         </p>
     {/if}
 </body>
-
-<style>
-    /* .tooltip{
-        position: absolute;
-        width: 120;
-        height: auto;
-        font-family: simsun;
-        font-size: 40px;
-        text-align: center;
-        border-style: solid; 
-        border-width: 1px;
-        background-color: white;
-        border-radius: 5px;
-        left:200px;
-    } */
-</style>
