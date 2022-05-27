@@ -1,56 +1,48 @@
 <script>
-import {
-    List,
-    ListItem,
-    NavigationDrawer
-} from "smelte";
-import {
-    right,
-    elevation,
-    persistent,
-    showNav
-} from '../stores/config';
-const menu = [{
-        to: "../../src",
-        text: 'Buttons'
-    },
-    {
-        to: "components/selection-controls",
-        text: 'Selection controls'
-    },
-    // { to: "components/selection-controls", text: 'Selection controls' },
-    // { to: "components/lists", text: 'Lists' },
-    // { to: "components/navigation-drawers", text: 'Navigation Drawers' },
-    { to: "..", text: 'Go back' },
-];
-let path = "components/navigation-drawers";
+    import {
+        Tabs,
+        Tab,
+        Image,
+        TextField
+    } from "smelte";
+    // import {
+    //     right,
+    //     elevation,
+    //     persistent,
+    //     showNav
+    // } from '../stores/config';
+    // const menu = [{
+    //         to: "../../src",
+    //         text: 'Buttons'
+    //     },
+    //     {
+    //         to: "components/selection-controls",
+    //         text: 'Selection controls'
+    //     },
+    //     // { to: "components/selection-controls", text: 'Selection controls' },
+    //     // { to: "components/lists", text: 'Lists' },
+    //     // { to: "components/navigation-drawers", text: 'Navigation Drawers' },
+    //     { to: "..", text: 'Go back' },
+    // ];
+    // let path = "components/navigation-drawers";
+    // let loading = false;
 </script>
 
-<NavigationDrawer
-    bind:showDesktop={$showNav}
-    right={$right}
-    persistent={$persistent}
-    elevation={$elevation}
-    >
-    <h6
-        class="p-6 ml-1 pb-2 text-xs text-gray-900"
-        >功能</h6>
-    <List items={menu}>
-        <span slot="item" let:item={item} class="cursor-pointer">
-            {#if item.to === '/typography'}
-            <hr>
-            <h6 class="p-6 ml-1 py-2 text-xs text-gray-900">Utilities</h6>
-            {/if}
-
-            <a href={item.to}>
-                <ListItem
-                    selected={path.includes(item.to)}
-                    {...item}
-                    dense
-                    navigation
-                    />
-                    </a>
-                    </span>
-                    </List>
-                    <hr>
-                    </NavigationDrawer>
+<div style="max-width: 400px">
+    <Tabs selected="1" class="bg-black shadow-sm mt-6 text-white rounded-t-lg" color="yellow-a200"
+        let:selected={selected} items={[ { id: "1" , text: 'Cats' , icon: 'alarm_on' }, { id: "2" , text: 'Kittens' ,
+        icon: 'bug_report' }, { id: "3" , text: 'Kitties' , icon: 'eject' }, ]}>
+        <div slot="content" class="flex items-center content-center overflow-hidden w-full bg-gray-900 h-full"
+            style="height: 250px">
+            <Tab id="1" {selected}>
+                <Image alt="kitten 1" class="w-full" src="https://placekitten.com/400/250" width="400" height="250" />
+            </Tab>
+            <Tab id="2" {selected}>
+                <Image alt="kitten 1" class="w-full" src="https://placekitten.com/400/251" width="400" height="250" />
+            </Tab>
+            <Tab id="3" {selected}>
+                <Image alt="kitten 3" class="w-full" src="https://placekitten.com/400/253" width="400" height="250" />
+            </Tab>
+        </div>
+    </Tabs>
+</div>
