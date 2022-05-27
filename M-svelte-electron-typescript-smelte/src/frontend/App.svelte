@@ -23,6 +23,7 @@ h1 {
 <script lang="ts">
 export let name: string;
 import "smelte/src/tailwind.css";
+import Overview from "./components/Overview.svelte";
 // import Player from "./components/Player.svelte";
 import PlayerWave from "./components/PlayerWave.svelte";
 import TestD3 from "./components/TestD3.svelte";
@@ -56,12 +57,13 @@ import UploadMusic from "./components/UploadMusic.svelte";
     <!-- <TestTransmition/> -->
     
     <!-- <TestDuration/> -->
-    <p>
+    <!-- <p>
         ------------------------------------------<br><br>
-    </p>
+    </p> -->
     <!-- <TestWave/> -->
     <!-- <TestZero/> -->
     <!-- <TestSpecCent/> -->
-    <TestKnn/>
+    <!-- <TestKnn/> -->
+    <Overview/>
 
 </main>
