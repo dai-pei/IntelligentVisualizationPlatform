@@ -1,5 +1,6 @@
 import usocket as socket
 import ustruct as struct
+import uselect
 from ubinascii import hexlify
 
 
@@ -69,7 +70,12 @@ class MQTTClient:
         if self.ssl:
             import ussl
 
-            self.sock = ussl.wrap_socket(self.sock, **self.ssl_params)
+            self.sock = ussl.wrap_socket(self.sock, server_hostname=self.server)
+            # self.sock = ussl.wrap_socket(self.sock, **self.ssl_params) 原本的，上面是修改过的
+        self.p = uselect.poll()
+        self.p.register(self.sock, uselect.POLLIN)  
+        # 上面这两句也是新加的
+
         premsg = bytearray(b"\x10\0\0\0\0\0")
         msg = bytearray(b"\x04MQTT\x04\x02\0\0")
 
@@ -211,5 +217,12 @@ class MQTTClient:
     # If not, returns immediately with None. Otherwise, does
     # the same processing as wait_msg.
     def check_msg(self):
-        self.sock.setblocking(False)
-        return self.wait_msg()
+        # self.sock.setblocking(False)
+        # return self.wait_msg()
+        # 上面两句是原本的
+        #self.sock.settimeout(0.0) #setblocking(False)
+        res = self.p.ipoll(0)
+        for s,e in res:
+            if e & uselect.POLLIN: 
+                return self.wait_msg()
+        return None   

@@ -17,8 +17,7 @@ ssid="scut_303"
 pwd="scutb8303"
 
 mqttHost="broker.emqx.io"
-mqttPort="1883"
-subTopic=b'commandTopic/'
+subTopic=b'testtopic'
 
 def connectWifi():    
     global ssid,pwd
@@ -46,7 +45,7 @@ def connectWifi():
     return 
 
 def connectMQTT():
-    global mqttHost,mqttPort,subTopic
+    global mqttHost,subTopic
     client=MQTTClient("1", mqttHost,0)
     client.set_callback(mqttCallback)
     print("set_callback")
@@ -58,15 +57,23 @@ def connectMQTT():
     print('conn_ret_code = {0}'.format(conn_ret_code))
     
     client.subscribe(subTopic)
-    print("Connected to %s, subscribed to %s and %s" % (mqttHost, subTopic))
+    print("Connected to %s, subscribed to %s " % (mqttHost, subTopic))
   
     while True:
-        client.check_msg()
+            client.wait_msg()
+            # else:
+            #     # Non-blocking wait for message
+            #     c.check_msg()
+            #     # Then need to sleep to avoid 100% CPU usage (in a real
+            #     # app other useful actions would be performed instead)
+            #     time.sleep(1)
+
 
 def mqttCallback(topic,msg):
     print('topic: {}'.format(topic))
     print('msg: {}'.format(msg))
     if topic==subTopic:
+        if msg='xx'
         if msg==b'tom':
             # print("duty 20")
             servo1.duty(20)

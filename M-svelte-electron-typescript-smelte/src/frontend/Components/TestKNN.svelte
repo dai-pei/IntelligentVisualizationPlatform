@@ -11,7 +11,7 @@
     let orgDataIdx:number[];
 
     // 最多只支持7种类别的区分
-    var colorName = ["red", "blue", "green", "yellow", "black","purple","orange"];
+    var colorName = ["red", "black", "green", "yellow", "blue","purple","orange","crimson"];
 
 
     let width:number=1000
@@ -131,30 +131,36 @@
             //         });
             //         //d3.select(this) //在传给任何D3方法的匿名函数中，如果想操作当前元素，只要引用this就行
             //  });
-            .on("mouseover",function(d){
+            .on("mouseover",function(event,d){
                 /*
                 鼠标移入时，
                     （1）通过 selection.html() 来更改提示框的文字
                     （2）通过更改样式 left 和 top 来设定提示框的位置
                     （3）设定提示框的透明度为1.0（完全不透明）
                     */
+                d3.select(this)
+                    .attr("r",10)
+                    .style("fill","green");
 
-                tooltip.html(d.data[0] + "的出货量为" + "<br />" + 
-                d.data[1] + " 百万台")
-                            .style("left", (d3.event.pageX) + "px")
-                            d3.
-                            .style("top", (d3.event.pageY + 20) + "px")
+                tooltip.html(d[0]+","+d[1]+","+d[2])
+                            .style("position","absolute")
+                            .style("left", (d3.pointer(event,this)[0]) + "px")
+                            .style("top", (d3.pointer(event,this)[1]+100) + "px")
                             .style("opacity",1.0);
                 })
-                .on("mousemove",function(d){
+                .on("mousemove",function(event,d){
                 /* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
 
-                    tooltip.style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY + 20) + "px");
+                    // console.log(d3.pointer(event,this));
+                    tooltip.style("left", (d3.pointer(event,this)[0]) + "px")
+                            .style("top", (d3.pointer(event,this)[1]+100) + "px");
                 })
-                .on("mouseout",function(d){
+                .on("mouseout",function(event,d){
                 /* 鼠标移出时，将透明度设定为0.0（完全透明）*/
 
+                    d3.select(this)
+                        .attr("r",5)
+                        .style("fill",compute(d[2]));
                     tooltip.style("opacity",0.0);
             })
     }
@@ -235,16 +241,17 @@
 </body>
 
 <style>
-    .tooltip{
+    /* .tooltip{
         position: absolute;
         width: 120;
         height: auto;
         font-family: simsun;
-        font-size: 14px;
+        font-size: 40px;
         text-align: center;
         border-style: solid; 
         border-width: 1px;
         background-color: white;
         border-radius: 5px;
-    }
+        left:200px;
+    } */
 </style>
