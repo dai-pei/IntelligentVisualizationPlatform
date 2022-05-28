@@ -1,52 +1,67 @@
 <script lang="ts">
-    // import {CurrentSongPath} from '../stores/status';
-    // import { onMount } from 'svelte';
-    // import * as d3 from 'd3';
-    // let el: any;
-    
-    // onMount(() => {
-    
-    //     var p = d3.select(el)
-    //         .selectAll("p");
-    
-    //     p.text("Hello World");
-    //     //修改段落的颜色和字体大小
-    //     p.style("color", "red")
-    //         .style("font-size", "72px");
-    // });
-    
-    function handleFileUploaded(e: Event) {
-            const target = e.target as HTMLInputElement;
-            const files = target.files;
-            if (!files) {
-                return;
-            }
-    
-            const file = files[0];
-            if (!file) {
-                return;
-            }
-    
-            // CurrentSongPath.set(file.name)
-            console.log(file.name)
-        }
-    
-    </script>
-    
-    <section class="w-full flex flex-col items-center justify-center gap-8">
-        <!-- <body bind:this={el}> -->
-        <body>
-            <form >
-                <label for="audio" class="text-md text-gray-200 font-semibold mb-3">
-                    Upload file
-                </label>
-                <input type="file" id="audio" name="audio" accept=".wav,.mp3,.ogg" on:change={handleFileUploaded} class="block text-secondary
-                    file:mx-4 file:py-2 file:px-4 file:bg-secondary file:rounded-full file:border-0
-                    file:font-semibold file:text-secondary-content hover:file:bg-secondary-focus" />
-            </form>
-        </body>
-    </section>
-    
-    <style>
-    </style>
-    
+    import Ripple from '@smui/ripple';
+    import Button, {
+        Label
+    } from '@smui/button';
+    import Textfield from '@smui/textfield';
+    import {
+        filePath,
+        showWave
+    } from "../stores/status";
+    import ShowWave from './ShowWave.svelte';
+
+    let tempshowWave: boolean;
+    let tempfilePath: any = null;
+
+    filePath.subscribe(value => {
+        tempfilePath = value;
+    });
+    showWave.subscribe(value => {
+        tempshowWave = value;
+    })
+
+    function setFilePaths(){
+        filePath.set(tempfilePath);
+        tempshowWave=true;
+        showWave.set(tempshowWave);
+
+        console.log(tempfilePath);
+    }
+</script>
+
+<body>
+    <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
+        准备好全新的体验吧，您将学习到如何进行音乐转录<br>
+        先从选择一首歌开始吧
+    </p>
+
+    <div class="hide-file-ui">
+        <Textfield bind:files={tempfilePath} label="File" type="file" />
+    </div>
+
+    <Button on:click={setFilePaths}>
+        <Label>展示波形</Label>
+    </Button>
+    {#if tempshowWave}
+        <ShowWave/>
+    {/if}
+</body>
+
+<style>
+    p {
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    [tabindex='0'] {
+        cursor: pointer;
+    }
+   
+    .hide-file-ui :global(input[type='file']::file-selector-button) {
+        display: none;
+    }
+    .hide-file-ui
+        :global(:not(.mdc-text-field--label-floating) input[type='file']) {
+        color: transparent;
+    }
+</style>

@@ -15,3 +15,5 @@ export let orgDataIdx=writable([]);
 export let orgDataCircle:any=writable([]);
 
 export let filePathMulti=writable([]);
+
+export let showWave=writable(false);

@@ -1,48 +1,24 @@
 <script>
-    import {
-        Tabs,
-        Tab,
-        Image,
-        TextField
-    } from "smelte";
-    // import {
-    //     right,
-    //     elevation,
-    //     persistent,
-    //     showNav
-    // } from '../stores/config';
-    // const menu = [{
-    //         to: "../../src",
-    //         text: 'Buttons'
-    //     },
-    //     {
-    //         to: "components/selection-controls",
-    //         text: 'Selection controls'
-    //     },
-    //     // { to: "components/selection-controls", text: 'Selection controls' },
-    //     // { to: "components/lists", text: 'Lists' },
-    //     // { to: "components/navigation-drawers", text: 'Navigation Drawers' },
-    //     { to: "..", text: 'Go back' },
-    // ];
-    // let path = "components/navigation-drawers";
-    // let loading = false;
-</script>
+    import { Router, Route } from "svelte-routing";
+    import NavLink from "./NavLink.svelte";
+    import UploadMusic from "./UploadMusic.svelte";
+    import ShowFeatures from "./ShowFeatures.svelte";
+    import DoClassify from "./DoClassify.svelte";
+  
+    // Used for SSR. A falsy value is ignored by the Router.
+    export let url = "";
+  </script>
 
-<div style="max-width: 400px">
-    <Tabs selected="1" class="bg-black shadow-sm mt-6 text-white rounded-t-lg" color="yellow-a200"
-        let:selected={selected} items={[ { id: "1" , text: 'Cats' , icon: 'alarm_on' }, { id: "2" , text: 'Kittens' ,
-        icon: 'bug_report' }, { id: "3" , text: 'Kitties' , icon: 'eject' }, ]}>
-        <div slot="content" class="flex items-center content-center overflow-hidden w-full bg-gray-900 h-full"
-            style="height: 250px">
-            <Tab id="1" {selected}>
-                <Image alt="kitten 1" class="w-full" src="https://placekitten.com/400/250" width="400" height="250" />
-            </Tab>
-            <Tab id="2" {selected}>
-                <Image alt="kitten 1" class="w-full" src="https://placekitten.com/400/251" width="400" height="250" />
-            </Tab>
-            <Tab id="3" {selected}>
-                <Image alt="kitten 3" class="w-full" src="https://placekitten.com/400/253" width="400" height="250" />
-            </Tab>
-        </div>
-    </Tabs>
-</div>
+<Router url="{url}">
+    <nav>
+      <NavLink to="wave">加载音乐</NavLink>
+      <NavLink to="feature">特征解析</NavLink>
+      <NavLink to="classify">进行分类</NavLink>
+    </nav>
+    <div>
+      <Route path="wave" component="{UploadMusic}" />
+      <Route path="feature" component="{ShowFeatures}" />
+      <Route path="classify" component="{DoClassify}" />
+    </div>
+  </Router>
+  
