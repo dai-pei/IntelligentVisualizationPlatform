@@ -1,15 +1,130 @@
-<!-- <script>
-    import {filePath} from "../stores/status";
-    let musicPath="";
-    filePath.subscribe((value)=>{
-        musicPath=value;
+<script lang="ts">
+    import * as d3 from "d3";
+    import {onMount} from "svelte";
+    import {totalDuration,orgData, filePath} from '../stores/status';
+
+    let temporgData:any;
+    let tempfilePath:any;
+    let orgDataLen:number;
+    let orgDataCircle:number[][]=[];
+    let orgDataIdx:number[];
+
+    let width:any="80%"
+    let height:any="80%" 
+    var margin = { top: 40, right: 40, bottom: 40, left: 40 };
+
+    orgData.subscribe(value=>{
+        temporgData=value;
     });
+    filePath.subscribe(value=>{
+        tempfilePath=value;
+    });
+
+    onMount(()=>{
+        requestOrgData();
+    });
+    
+    function requestOrgData(){
+        console.log(tempfilePath);
+        fetch(`http://127.0.0.1:6005/orgdata/`, {
+            method: 'post',
+            body:JSON.stringify({filepath:tempfilePath}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            return res.json().then((response) => {
+                console.log("response",response);
+                totalDuration.set(response['duration']);
+                orgData.set(response["orgdata"]);
+
+                initVariables();
+                drawWave();
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+
+    function initVariables(){
+        orgDataLen=temporgData.length;
+        console.log("org data len:")
+        console.log(orgDataLen)
+        orgDataIdx=new Array<number>(orgDataLen);
+        for(var i=0;i<orgDataLen;i++)
+        {   
+            orgDataIdx[i]=i;
+        }
+        for(var i=0;i<orgDataLen;i++)
+        {   
+            let temp:any=new Array(2);
+            if(temporgData[i]==null || temporgData[i]==undefined)
+                temp[1]=0;
+            else
+                temp[1]=temporgData[i];
+            temp[0]=orgDataIdx[i];
+            orgDataCircle.push(temp);
+        }                  
+    }
+
+    function drawWave(){
+        // d3.select('#waveplot').selectAll('*').remove();
+        d3.selectAll('*').remove();
+
+        var svg = d3.select('#waveplot')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom);
+            
+        // svg.selectAll("*").remove();
+
+        var xScale = d3.scaleLinear()
+            .domain([0, orgDataLen+orgDataLen/10])
+            .range([0, 800]);
+
+        var yScale = d3.scaleLinear()
+            .domain([-1, 1])
+            .range([0, 500])
+
+        var xAxis = d3.axisTop(xScale)
+        yScale.range([500, 0]);  // 重新设置y轴比例尺的值域,与原来的相反        
+        var yAxis = d3.axisLeft(yScale)
+
+        svg.append("g").attr("class", "axis")
+                .attr("transform", "translate("+ margin.left +","+ margin.bottom +")")
+                .call(xAxis);
+        svg.append("g").attr("class", "axis")
+                .attr("transform", "translate("+ margin.left +","+ margin.bottom +")")
+                .call(yAxis);
+
+        svg.selectAll("circle")  
+            .data(orgDataCircle)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                    return margin.left + xScale(d[0]);
+            })
+            .attr("cy", function(d) {
+                    return  yScale(d[1]) + margin.bottom;
+            })
+            .attr("r", 1)
+            .attr("fill", "rgb(0,0,255)");
+    }
+
+
 </script>
 
 <body>
-    <audio src={musicPath} id="currentMusic"></audio>
+    <div>
+        <p>
+            the player buttons...
+        </p>
+    </div>
+    <div id="waveplot">
 
-</body> -->
+    </div>
+</body>
 
 <style>
     body {
@@ -21,49 +136,3 @@
         left: 0;
     }
 </style>
-<body>
-
-</body>
-
-<script lang="ts">
-    import * as d3 from "d3"
-    var start = [0, 0];
-    var end = [100, 20];
-
-    var length = Math.sqrt(Math.pow(start[0] - end[0], 2) +
-        Math.pow(start[1] - end[1], 2));
-
-    var dirUnitVector = [
-        (end[0] - start[0]) / length,
-        (end[1] - start[1]) / length
-    ];
-
-    var svg = d3.select("body").append("svg")
-        .attr("width", 300)
-        .attr("height", 200)
-        .attr('viewBox', '-10 0 120 20')
-        .style('stroke', "black");
-
-    svg.append('line')
-        .attr('x1', start[0])
-        .attr('y1', start[1])
-        .attr('x2', end[0])
-        .attr('y2', end[1]);
-
-    var c = svg.append('circle')
-        .attr('cx', start[0])
-        .attr('cy', start[1])
-        .attr('r', 2)
-        .style('fill', 'blue')
-        .call(d3.drag().on("drag", function (event,d) {
-            var mouseVector = [
-                d3.pointer(event)[0] - start[0],
-                d3.pointer(event)[1] - start[1],
-            ];
-            var projection =
-                mouseVector[0] * dirUnitVector[0] +
-                mouseVector[1] * dirUnitVector[1];
-            c.attr('cx', start[0] + dirUnitVector[0] * projection);
-            c.attr('cy', start[1] + dirUnitVector[1] * projection);
-        }));
-</script>

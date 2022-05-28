@@ -10,7 +10,7 @@
     } from "../stores/status";
     import ShowWave from './ShowWave.svelte';
 
-    let tempshowWave: boolean;
+    let tempshowWave: boolean=false;
     let tempfilePath: any = null;
 
     filePath.subscribe(value => {
@@ -22,7 +22,7 @@
 
     function setFilePaths(){
         filePath.set(tempfilePath);
-        tempshowWave=true;
+        tempshowWave=!tempshowWave;
         showWave.set(tempshowWave);
 
         console.log(tempfilePath);

@@ -108,10 +108,10 @@ def orgdata():
     if request.method == 'POST':
         print(request.json)
         filep=request.json['filepath']
-        startsec=request.json['startsecond']
-        endsec=request.json['endsecond']
+        # startsec=request.json['startsecond']
+        # endsec=request.json['endsecond']
         # print(filep,startsec,endsec)
-        ret=json.dumps({"loaddata":LoadOrgData(filep,startsec,endsec).tolist()})
+        ret=json.dumps({"duration":GetDuration(filep),"orgdata":LoadOrgDataFulllLength(filep).tolist()})
         # print(LoadOrgData(filep,startsec,endsec).shape)
         return ret
     return {"msg":"fail"}
