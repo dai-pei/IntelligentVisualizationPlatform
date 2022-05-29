@@ -9,9 +9,15 @@
     let orgDataCircle:number[][]=[];
     let orgDataIdx:number[];
 
-    let width:any="80%"
-    let height:any="80%" 
+    let temptotalDuration:number;
+
+    let width:any=600
+    let height:any=600 
     var margin = { top: 40, right: 40, bottom: 40, left: 40 };
+
+    totalDuration.subscribe(value=>{
+        temptotalDuration=value;
+    })
 
     orgData.subscribe(value=>{
         temporgData=value;
@@ -51,12 +57,21 @@
         orgDataLen=temporgData.length;
         console.log("org data len:")
         console.log(orgDataLen)
+
+        // 由于三分多钟的歌曲渲染出来会死机出错，svg dom元素过多绘制报错，所以这里做一个减半的处理
+        let step:number;
+        step=Math.floor(orgDataLen/22050/60)+1;
+        if(step==0){
+            step=1;
+        }
+        console.log("step "+String(step));
+
         orgDataIdx=new Array<number>(orgDataLen);
-        for(var i=0;i<orgDataLen;i++)
+        for(var i=0;i<orgDataLen;i=i+step)
         {   
             orgDataIdx[i]=i;
         }
-        for(var i=0;i<orgDataLen;i++)
+        for(var i=0;i<orgDataLen;i=i+step)
         {   
             let temp:any=new Array(2);
             if(temporgData[i]==null || temporgData[i]==undefined)
@@ -69,15 +84,13 @@
     }
 
     function drawWave(){
-        // d3.select('#waveplot').selectAll('*').remove();
-        d3.selectAll('*').remove();
+        console.log("draw wave");
+        d3.select("#waveplot").selectAll('*').remove();
 
         var svg = d3.select('#waveplot')
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
-            
-        // svg.selectAll("*").remove();
 
         var xScale = d3.scaleLinear()
             .domain([0, orgDataLen+orgDataLen/10])
@@ -110,7 +123,21 @@
             })
             .attr("r", 1)
             .attr("fill", "rgb(0,0,255)");
-    }
+
+        svg.append("line")
+            .attr("x1", margin.left)
+            .attr("y2", 20)
+            .attr("x2", margin.left)
+            .attr("y2", height+20)
+            .attr("stroke", "black")
+            .attr("stroke-width", "8px")
+            .transition()
+            .duration(temptotalDuration*1000)
+            .attr("x1", margin.left+900)
+            .attr("y2", 20)
+            .attr("x2", margin.left+900)
+            .attr("y2", height+20);
+    };
 
 
 </script>
