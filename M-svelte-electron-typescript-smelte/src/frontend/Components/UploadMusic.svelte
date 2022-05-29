@@ -21,7 +21,7 @@
     })
 
     function setFilePaths(){
-        filePath.set(tempfilePath[0].path);
+        filePath.set(tempfilePath);
         tempshowWave=!tempshowWave;
         showWave.set(tempshowWave);
 
@@ -36,18 +36,14 @@
     </p>
 
     <div class="hide-file-ui">
-        <Textfield bind:files={tempfilePath} type="file" />
+        <Textfield bind:files={tempfilePath} label="File" type="file" />
     </div>
 
-    {#if tempshowWave}
-        <Button on:click={setFilePaths}>
-            <Label>重选歌曲，更新波形</Label>
-        </Button>
+    <Button on:click={setFilePaths}>
+        <Label>展示波形</Label>
+    </Button>
+    {#if tempshowWave==!tempshowWave}
         <ShowWave/>
-    {:else}
-        <Button on:click={setFilePaths}>
-            <Label>展示波形</Label>
-        </Button>
     {/if}
 </body>
 
