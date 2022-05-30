@@ -108,6 +108,7 @@ def orgdata():
     if request.method == 'POST':
         print(request.json)
         filep=request.json['filepath']
+        print("filep is ",filep)
         # startsec=request.json['startsecond']
         # endsec=request.json['endsecond']
         # print(filep,startsec,endsec)
