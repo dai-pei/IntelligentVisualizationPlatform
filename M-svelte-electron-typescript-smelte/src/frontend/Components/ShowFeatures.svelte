@@ -7,11 +7,11 @@
         Item,
         Text
     } from '@smui/list';
-import LinearAndLogSpectrum from './LinearAndLogSpectrum.svelte';
-import SpectrumCentroid from './SpectrumCentroid.svelte';
-import ZeroCrossingRate from './ZeroCrossingRate.svelte';
+    import LinearAndLogSpectrum from './features/LinearAndLogSpectrum.svelte';
+    import SpectrumCentroid from './features/SpectrumCentroid.svelte';
+    import ZeroCrossingRate from './features/ZeroCrossingRate.svelte';
 
-    let showFeatureIdx=0;
+    let showFeatureIdx = 0;
     // showFeatureIdx值对应关系：
     // 0：不展示内容
     // 1：过零率

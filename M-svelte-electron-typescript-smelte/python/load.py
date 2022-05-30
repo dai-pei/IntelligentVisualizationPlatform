@@ -58,18 +58,22 @@ def LoadSpecData(filepath):
     S_db=librosa.power_to_db(S ** 2)
     return S_db
 
-def LoadZeroCrossingRate(filepath,startsecond,endsecond):
-    y=LoadOrgData(filepath,startsecond,endsecond)
+def LoadZeroCrossingRate(filepath,startsecond=-1,endsecond=-1):
+    # y=LoadOrgData(filepath,startsecond,endsecond)
+    y=LoadOrgDataFulllLength(filepath)
     # zcrs = librosa.feature.zero_crossing_rate(y=y,frame_length=2048, hop_length=512, center=True)
     zcrs = librosa.feature.zero_crossing_rate(y)
+    zcrsMax=np.max(zcrs[0])
     print(zcrs.shape)
-    return zcrs[0]
+    return zcrs[0],zcrsMax
 
-def LoadSpectrumCentroid(filepath,startsecond,endsecond):
-    y=LoadOrgData(filepath,startsecond,endsecond)
+def LoadSpectrumCentroid(filepath,startsecond=-1,endsecond=-1):
+    # y=LoadOrgData(filepath,startsecond,endsecond)
+    y=LoadOrgDataFulllLength(filepath)
     cent = librosa.feature.spectral_centroid(y)
-    print(cent.shape)
-    return cent[0]
+    # print(cent.shape)
+    centmax=np.max(cent[0])
+    return cent[0],centmax
 
 def LoadZeroAndCentForKNN(filepathmul,classes):
     retArr=[]
@@ -131,11 +135,11 @@ def zerocrossingrate():
     error=None
     if request.method == 'POST':
         filep=request.json['filepath']
-        startsec=request.json['startsecond']
-        endsec=request.json['endsecond']
-        print(filep,startsec,endsec)
-        ret= json.dumps({"zcrs":LoadZeroCrossingRate(filep,startsec,endsec).tolist()})
-        # print(ret)
+        # startsec=request.json['startsecond']
+        # endsec=request.json['endsecond']
+        # print(filep,startsec,endsec)
+        zero=LoadZeroCrossingRate(filep)
+        ret= json.dumps({"zcrs":zero[0].tolist(),"zcrsmax":zero[1]})
         return ret
     return {"msg":"fail"}
 
@@ -144,10 +148,11 @@ def spectrumcentroid():
     error=None
     if request.method == 'POST':
         filep=request.json['filepath']
-        startsec=request.json['startsecond']
-        endsec=request.json['endsecond']
-        print(filep,startsec,endsec)
-        ret= json.dumps({"cent":LoadSpectrumCentroid(filep,startsec,endsec).tolist()})
+        # startsec=request.json['startsecond']
+        # endsec=request.json['endsecond']
+        # print(filep,startsec,endsec)
+        cent=LoadSpectrumCentroid(filep)
+        ret= json.dumps({"cent":cent[0].tolist(),"centmax":cent[1]})
         # print(ret)
         return ret
     return {"msg":"fail"}

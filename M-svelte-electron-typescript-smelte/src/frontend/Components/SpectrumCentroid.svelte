@@ -1,3 +1,0 @@
-<body>
-    spec cent
-</body>

@@ -430,3 +430,9 @@ https://www.sveltejs.cn/tutorial/multiple-select-bindings
 
 # 20220527
 ## d3.js 交互
+
+
+# 20220530
+## smelte bug
+所有的component的css表都没有用到smelte相关，global.css也没有用过，但是如果删除在rollup.js种smelte的plugin声明部分，就会出现样式奇怪的情况
+等所有功能组件都写好后，把smelte的这个部分重新搞一下

@@ -31,8 +31,8 @@
 
 <body>
     <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
-        准备好全新的体验吧，您将学习到如何进行音乐转录<br>
-        先从选择一首歌开始吧
+        您将学习到如何进行音乐转录<br>
+        先从选择一首歌开始吧！
     </p>
 
     <div class="hide-file-ui">
