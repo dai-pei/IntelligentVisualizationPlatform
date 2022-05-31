@@ -78,8 +78,6 @@ def LoadSpectrumCentroid(filepath,startsecond=-1,endsecond=-1):
 def LoadZeroAndCentForKNN(filepathmul,classes):
     retArr=[]
     for filepathinfo in filepathmul:
-        # print(filepathinfo)
-
         y=LoadOrgDataFulllLength(filepathinfo[0])
         label=filepathinfo[1]
         zero=librosa.feature.zero_crossing_rate(y)
@@ -157,17 +155,20 @@ def spectrumcentroid():
         return ret
     return {"msg":"fail"}
 
-@app.route('/zerocentmaxforknn/', methods=['POST', 'GET'])
-def zerocentmaxforknn():
+@app.route('/featuresforknn/', methods=['POST', 'GET'])
+def featuresforknn():
     error=None
     if request.method == 'POST':
         filepathmul=request.json['filepathmulti']
         classes=request.json['classes']
-        # print(filepathmul,classes)
-        ret= json.dumps({"data":LoadZeroAndCentForKNN(filepathmul,classes)})
+        feature1=request.json['feature1']
+        feature2=request.json['feature2']
+        print(filepathmul,classes,feature1,feature2)
+        # ret= json.dumps({"data":LoadZeroAndCentForKNN(filepathmul,classes)})
         # ret= json.dumps({"cent":LoadZeroAndCentForKNN(filepathmul,classes).tolist()})
         # print(ret)
-        return ret
+        # return ret
+        return {'msg':"success"}
     return {"msg":"fail"}
 
 

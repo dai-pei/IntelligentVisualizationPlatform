@@ -119,6 +119,22 @@ p.svelte-1uux8rr{
   height:100%;
   box-sizing:border-box
 }
+.hide-file-ui.svelte-1iwj5ep input[type='file']::file-selector-button{
+  display:none
+}
+
+.hide-file-ui.svelte-1iwj5ep :not(.mdc-text-field--label-floating) input[type='file']{
+  color:transparent
+}
+
+.demo-cell.svelte-1iwj5ep{
+  height:200px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:var(--mdc-theme-secondary, #333);
+  color:var(--mdc-theme-on-secondary, rgb(247, 8, 8))
+}
 main.svelte-ham7r5{
   text-align:center;
   padding:1em;
