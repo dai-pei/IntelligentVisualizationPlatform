@@ -436,3 +436,12 @@ https://www.sveltejs.cn/tutorial/multiple-select-bindings
 ## smelte bug
 所有的component的css表都没有用到smelte相关，global.css也没有用过，但是如果删除在rollup.js种smelte的plugin声明部分，就会出现样式奇怪的情况
 等所有功能组件都写好后，把smelte的这个部分重新搞一下
+
+# 20220531
+## 播放音频和d3画line并transmission不同步的问题
+依靠延时？
+
+## todo
+1. 傅里叶变换
+2. 修复播放同步的bug
+3. 组件的复杂交互

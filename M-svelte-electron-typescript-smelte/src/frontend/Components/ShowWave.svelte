@@ -75,8 +75,8 @@
         if (volumeSeeking) seekVolume(event);
     }
 
-    let width: any = 1200
-    let height: any = 600
+    let width: any = "60%"
+    let height: any = "60%"
     var margin = {
         top: 40,
         right: 40,
@@ -232,46 +232,59 @@
             .attr("x2", margin.left)
             .attr("y2", height + 20)
             .attr("stroke", "black")
-            .attr("stroke-width", "8px")
-            .transition()
-            .ease(easeLinear)
-            //duration 单位是ms，把totalDurtation的值秒单位转变为ms
-            .duration(temptotalDuration * 1000)
-            .attr("x1", margin.left + width)
-            .attr("y2", 20)
-            .attr("x2", margin.left + width)
-            .attr("y2", height + 20);
+            .attr("stroke-width", "4px");
 
         //问题在于svg画图形过程中是同步的吗？如果阻塞住了，那么不能同时画图和同时播放音乐
-        // 结论：是可以的，但是画面非常卡顿
-        // 解决方法：优化svg dom的渲染过程；增加加载中动画。但是对于1min的歌曲，加载时间会超过18s，不能接受
+        // 结论：是可以的，但是画面卡顿
+        // 解决方法：优化svg dom的渲染过程；增加加载中动画。但是对于1min的歌曲，加载时间会超过10s，不能接受
 
-        audio.play();
     };
 
     function play() {
+        // currentTime永远小于temptotalDuration，相差的数量级在10e-4 到10e-6之间
+        if(temptotalDuration-currentTime<0.0001){
+            currentTime=0;
+        }
+        paused=false;
+
+        console.log("function play()")
+        console.log(temptotalDuration)
+        console.log("currentTime")
+        console.log(currentTime)
+
         audio.play()
         d3.select("#wavingline")
+            .attr("x1", margin.left + (currentTime / temptotalDuration) * (width-width/11))
+            .attr("y2", 20)
+            .attr("x2", margin.left + (currentTime / temptotalDuration) * (width-width/11))
+            .attr("y2", height + 20)
             .transition()
             .ease(easeLinear)
             .duration((temptotalDuration - currentTime) * 1000)
-            .attr("x1", margin.left + width)
+            .attr("x1", margin.left + (width-width/11))
             .attr("y2", 20)
-            .attr("x2", margin.left + width)
+            .attr("x2", margin.left + (width-width/11))
             .attr("y2", height + 20);
-        console.log("svg play line");
+
+        // console.log("svg play line");
         // 一旦创建好了一个过渡效果，就不能再改变了
         // 但如果一个元素的一个属性正在进行过渡，此时又开始了这个属性的另一个过渡，则之前的过渡会被终止。
     }
 
     function pause() {
+        console.log("function pause()")
+        console.log(temptotalDuration)
+        console.log("currentTime")
+        console.log(currentTime)
+
+        paused=true;
         audio.pause();
         d3.select("#wavingline")
             .transition()
             .ease(easeLinear)
-            .attr("x1", margin.left + (currentTime / temptotalDuration) * width)
+            .attr("x1", margin.left + (currentTime / temptotalDuration) * (width-width/11))
             .attr("y2", 20)
-            .attr("x2", margin.left + (currentTime / temptotalDuration) * width)
+            .attr("x2", margin.left + (currentTime / temptotalDuration) * (width-width/11))
             .attr("y2", height + 20);
         console.log("svg pause line");
     }
@@ -287,11 +300,11 @@
                 {preload}></audio>
             <div class="controls">
                 <button class="material-icons" on:click={()=> audio.paused ? play() : pause()}>
-                    {#if paused}
-                play_arrow
-            {:else}
-                pause
-            {/if}
+                {#if paused}
+                    play_arrow
+                {:else}
+                    pause
+                {/if}
             </button>
             <progress
                 bind:this={songBar}
