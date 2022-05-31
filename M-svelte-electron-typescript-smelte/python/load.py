@@ -1,4 +1,3 @@
-from multiprocessing.dummy import Array
 import librosa
 import numpy as np
 from flask import Flask,make_response
@@ -75,23 +74,63 @@ def LoadSpectrumCentroid(filepath,startsecond=-1,endsecond=-1):
     centmax=np.max(cent[0])
     return cent[0],centmax
 
-def LoadZeroAndCentForKNN(filepathmul,classes):
+def LoadFeaturesForKNN(filepathmul,classes,feature1,feature2):
+    N_FFT=1024
     retArr=[]
+    ret1max=-10000
+    ret1min=10000
+    ret2max=-10000
+    ret2min=10000
     for filepathinfo in filepathmul:
         y=LoadOrgDataFulllLength(filepathinfo[0])
         label=filepathinfo[1]
-        zero=librosa.feature.zero_crossing_rate(y)
-        cent = librosa.feature.spectral_centroid(y)
-        zero_max=np.max(zero[0])
-        cent_max=np.max(cent[0])
+        if feature1=='zero':
+            zero=librosa.feature.zero_crossing_rate(y)
+            ret1=np.max(zero[0])
+            ret1max=max(ret1max,ret1)
+            ret1min=min(ret1min,ret1)
+        elif feature1=='cent':
+            cent = librosa.feature.spectral_centroid(y)
+            ret1=np.max(cent[0])
+            ret1max=max(ret1max,ret1)
+            ret1min=min(ret1min,ret1)
+        elif feature1=='mfcc':
+            mfcc=librosa.feature.mfcc(y,n_mfcc=20, dct_type=2,norm='ortho',n_fft=N_FFT,hop_length=int(N_FFT/4))
+            ret1=np.max(mfcc[0])
+            ret1max=max(ret1max,ret1)
+            ret1min=min(ret1min,ret1)
+
+        if feature2=='zero':
+            zero=librosa.feature.zero_crossing_rate(y)
+            ret2=np.max(zero[0])
+            ret3=np.float64(ret2).item()
+            ret2max=max(ret2max,ret3)
+            ret2min=min(ret2min,ret3)
+        elif feature2=='cent':
+            cent = librosa.feature.spectral_centroid(y)
+            ret2=np.max(cent[0])
+            ret3=np.float64(ret2).item()
+            ret2max=max(ret2max,ret3)
+            ret2min=min(ret2min,ret3)
+        elif feature2=='mfcc':
+            mfcc=librosa.feature.mfcc(y,n_mfcc=20, dct_type=2,norm='ortho',n_fft=N_FFT,hop_length=int(N_FFT/4))
+            ret2=np.max(mfcc[0])
+            ret3=np.float64(ret2).item()
+            ret2max=max(ret2max,ret3)
+            ret2min=min(ret2min,ret3)
+
         tempArr=[]
-        tempArr.append(zero_max)
-        tempArr.append(cent_max)
+        # print(type(ret1))
+        # print(type(ret3))
+        # 不知道为什么直接使用ret2的话，由于type(ret2)为float32，无法在json.dumps()中
+        # 被转换，所以需要做一次预处理，把float32转成np.float64/python float
+        tempArr.append(ret1)
+        tempArr.append(ret3)
         tempArr.append(label)
         retArr.append(tempArr)
 
-    print(retArr)
-    return retArr
+    # print(retArr)
+    return retArr,ret1max,ret1min,ret2max,ret2min
 
 @app.route('/', methods=['POST', 'GET'])
 def root():
@@ -163,12 +202,15 @@ def featuresforknn():
         classes=request.json['classes']
         feature1=request.json['feature1']
         feature2=request.json['feature2']
-        print(filepathmul,classes,feature1,feature2)
-        # ret= json.dumps({"data":LoadZeroAndCentForKNN(filepathmul,classes)})
-        # ret= json.dumps({"cent":LoadZeroAndCentForKNN(filepathmul,classes).tolist()})
-        # print(ret)
-        # return ret
-        return {'msg':"success"}
+        # print(filepathmul,classes,feature1,feature2)
+        retArr= LoadFeaturesForKNN(filepathmul,classes,feature1,feature2)
+        # print(type(retArr))
+        # print(retArr)
+        ret= json.dumps({"featuresforknn":retArr[0],"ret1max":retArr[1],
+        "ret1min":retArr[2],
+        "ret2max":retArr[3],
+        "ret2min":retArr[4],})
+        return ret
     return {"msg":"fail"}
 
 

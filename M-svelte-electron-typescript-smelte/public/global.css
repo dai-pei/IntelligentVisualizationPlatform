@@ -119,21 +119,25 @@ p.svelte-1uux8rr{
   height:100%;
   box-sizing:border-box
 }
-.hide-file-ui.svelte-1iwj5ep input[type='file']::file-selector-button{
+.hide-file-ui.svelte-164yf9c input[type="file"]::file-selector-button{
   display:none
 }
 
-.hide-file-ui.svelte-1iwj5ep :not(.mdc-text-field--label-floating) input[type='file']{
+.hide-file-ui.svelte-164yf9c :not(.mdc-text-field--label-floating) input[type="file"]{
   color:transparent
 }
 
-.demo-cell.svelte-1iwj5ep{
+.demo-cell.svelte-164yf9c{
   height:200px;
   display:flex;
   justify-content:center;
   align-items:center;
   background-color:var(--mdc-theme-secondary, #333);
-  color:var(--mdc-theme-on-secondary, rgb(247, 8, 8))
+  color:var(--mdc-theme-on-secondary, rgb(245, 241, 241))
+}
+
+.svelte-164yf9c .demo-list{
+  max-width:300px
 }
 main.svelte-ham7r5{
   text-align:center;
