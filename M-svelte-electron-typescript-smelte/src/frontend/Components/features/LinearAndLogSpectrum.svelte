@@ -69,7 +69,7 @@
             for (var j = 0; j < orgDataLenFreq; j++) {
                 let temp: any = new Array(3);
                 temp[0] = i;
-                temp[1] = j*1024;
+                temp[1] = j;
                 // console.log(i,j)
                 let num: number | undefined | null = orgData[j][i];
                 if (num == undefined)

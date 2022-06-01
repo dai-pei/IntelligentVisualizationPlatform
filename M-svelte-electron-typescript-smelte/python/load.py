@@ -7,6 +7,8 @@ import json
 app = Flask(__name__)
 api = Api(app) 
 
+generateAudioIdx=0
+
 def GetDuration(filepath,startsec=-1,endsec=-1):
     y,sr=librosa.load(filepath)
     if(startsec==-1 or endsec==-1):
@@ -53,12 +55,19 @@ def LoadSpecData(filepath):
     print("load spec data: ",filepath)
     y,sr=librosa.load(filepath)
     # y=y[:250000]
-    # S = np.abs(librosa.stft(y,n_fft=2048,window='hann'))
-    # S_db=librosa.power_to_db(S ** 2)
-    # return S_db
+    S = np.abs(librosa.stft(y,n_fft=2048,window='hann'))
+    S_db=librosa.power_to_db(S ** 2)
+    # S = np.abs(librosa.stft(y,n_fft=1024,window='hann'))
+    # return S    
+    return S_db
 
-    S = np.abs(librosa.stft(y,n_fft=1024,window='hann'))
-    return S
+def GenerateAudioFromSamples(data,samplerate):
+    global generateAudioIdx
+    path="Audio"+str(generateAudioIdx)+".wav"
+    audiodata=np.asfortranarray(data)
+    librosa.output.write_wav(path,audiodata, sr=samplerate)
+    generateAudioIdx+=1
+    return path
 
 def LoadZeroCrossingRate(filepath,startsecond=-1,endsecond=-1):
     # y=LoadOrgData(filepath,startsecond,endsecond)
@@ -216,8 +225,19 @@ def featuresforknn():
         return ret
     return {"msg":"fail"}
 
+@app.route('/generateaudiofromsamples/', methods=['POST', 'GET'])
+def generateaudiofromsamples():
+    error=None
+    if request.method == 'POST':
+        data=request.json['wavedata']
+        samplerate=request.json['samplerate']
+        # print(filepathmul,classes,feature1,feature2)
+        retArr= GenerateAudioFromSamples(data,samplerate)
+        # print(type(retArr))
+        # print(retArr)
+        ret= json.dumps({"path":retArr})
+        return ret
+    return {"msg":"fail"}
 
 if __name__ == '__main__':    
-    app.run(debug=True,port=6005)
-
-    
+    app.run(debug=True,port=6005)  

@@ -445,3 +445,14 @@ https://www.sveltejs.cn/tutorial/multiple-select-bindings
 1. 傅里叶变换
 2. 修复播放同步的bug
 3. 组件的复杂交互
+4. 声音三要素：可视化展示及交互
+
+# 20220601
+## 幅度、功率、能量
+![频谱幅度功率的关系](img/频谱幅度功率.jpg)
+
+## 正弦波，频率，角频率
+https://www.cnblogs.com/shaonianpi/p/14512870.html
+
+## 音频处理基础，采样
+https://blog.csdn.net/Robin_Pi/article/details/112228917
