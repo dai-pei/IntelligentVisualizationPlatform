@@ -52,10 +52,13 @@ def LoadOrgDataFulllLength(filepath):
 def LoadSpecData(filepath):
     print("load spec data: ",filepath)
     y,sr=librosa.load(filepath)
-    y=y[:250000]
-    S = np.abs(librosa.stft(y,n_fft=2048,window='hann'))
-    S_db=librosa.power_to_db(S ** 2)
-    return S_db
+    # y=y[:250000]
+    # S = np.abs(librosa.stft(y,n_fft=2048,window='hann'))
+    # S_db=librosa.power_to_db(S ** 2)
+    # return S_db
+
+    S = np.abs(librosa.stft(y,n_fft=1024,window='hann'))
+    return S
 
 def LoadZeroCrossingRate(filepath,startsecond=-1,endsecond=-1):
     # y=LoadOrgData(filepath,startsecond,endsecond)

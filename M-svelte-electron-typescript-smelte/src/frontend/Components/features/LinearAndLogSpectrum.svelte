@@ -6,20 +6,21 @@
     import {
         onMount
     } from 'svelte';
+    import Ripple from '@smui/ripple';
     let orgData: number[] | undefined | null;
     let orgDataLenFreq: number | undefined | null;
     let orgDataLenTime: number | undefined | null;
     let orgDataIdx: number[] | undefined | null;
     let orgDataCircle: number[][][] = [];
 
-    var compute = d3.interpolate("red", "yellow");
-    let maxAmp: number = -100;
-    let minAmp: number = 100;
+    var compute = d3.interpolate("purple", "yellow");
+    let maxAmp: any = -100;
+    let minAmp: any = 100;
 
     let linear: any;
 
-    var width = 1000;
-    var height = 600;
+    var width = 600;
+    var height = 400;
     var margin = {
         top: 40,
         right: 40,
@@ -68,7 +69,7 @@
             for (var j = 0; j < orgDataLenFreq; j++) {
                 let temp: any = new Array(3);
                 temp[0] = i;
-                temp[1] = j;
+                temp[1] = j*1024;
                 // console.log(i,j)
                 let num: number | undefined | null = orgData[j][i];
                 if (num == undefined)
@@ -126,10 +127,40 @@
             .attr('height', 5)
             .style("fill", function (d) {
                 return compute(linear(d[2]));
+            })
+            .on("mouseover", function (event, d) {
+                d3.select(this)
+                .attr("r", 10)
+                .style("fill", "black");
+
+                tooltip.html("频率：" + d[1] + ",幅度：" + d[2])
+                .style("position", "absolute")
+                .style("left", (d3.pointer(event, this)[0]) + "px")
+                .style("top", (d3.pointer(event, this)[1] + width/10) + "px")
+                .style("opacity", 1.0);
+            })
+            .on("mousemove", function (event, d) {
+                tooltip.style("left", (d3.pointer(event, this)[0]) + "px")
+                .style("top", (d3.pointer(event, this)[1] + width/10) + "px");
+            })
+            .on("mouseout", function (event, d) {
+                d3.select(this)
+                .attr("r", 5)
+                .style("fill", compute(linear(d[2])));
+                tooltip.style("opacity", 0.0);
             });
+            
     }
+    
+    var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0.0);
 </script>
 
-<body>
+<body>    
+    <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
+        频谱其实是一个幅度谱，表示信号在各个频率分量上的幅度值
+    </p>
     <div id="spectrum"></div>
 </body>

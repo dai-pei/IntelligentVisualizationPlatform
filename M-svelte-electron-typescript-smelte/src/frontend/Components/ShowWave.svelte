@@ -75,8 +75,8 @@
         if (volumeSeeking) seekVolume(event);
     }
 
-    let width: any = "60%"
-    let height: any = "60%"
+    let width: any = 600
+    let height: any = 400
     var margin = {
         top: 40,
         right: 40,

@@ -58,8 +58,8 @@
   // 最多只支持7种类别的区分
   let colorName = ["red", "green", "blue", "yellow", "black", "purple", "orange"];
   let classArrList = ["open", "close", "crash", "ride", "kick", "snare", "Tom"]
-  let width: number = 1000
-  let height: number = 600
+  let width: number = 600
+  let height: number = 400
   var margin = {
     top: 40,
     right: 40,
@@ -160,7 +160,7 @@
   }
 
   function compute(classname: string) {
-    let idx = classArr.findIndex(value => value == classname);
+    let idx = classArrList.findIndex(value => value == classname);
     return colorName[idx];
   }
 

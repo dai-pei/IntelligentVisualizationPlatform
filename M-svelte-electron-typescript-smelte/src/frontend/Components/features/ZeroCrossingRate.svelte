@@ -11,8 +11,8 @@
 
     let orgDataZeroMax:any;
 
-    let width:number=1000
-    let height:number=600 
+    let width:number=600
+    let height:number=400 
     var margin = { top: 40, right: 40, bottom: 40, left: 40 };
 
     filePath.subscribe(value=>{
