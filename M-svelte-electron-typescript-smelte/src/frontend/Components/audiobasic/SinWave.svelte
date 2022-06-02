@@ -128,12 +128,12 @@
         <Cell span={12}>
             <div class="demo-cell">
                 <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
-                    单一频率的声音——固定形状的正弦波<br>
+                    单一频率的声音——固定形状的正弦波;<br>
                     sin_wave=A*sin(w*t+p)<br>
-                    A：振幅
-                    f：频率
-                    w：角频率，w=2*pi*f
-                    p：相位
+                    A：振幅<br>
+                    f：频率<br>
+                    w：角频率，w=2*pi*f<br>
+                    p：相位<br>
                 </p>
             </div>
         </Cell>

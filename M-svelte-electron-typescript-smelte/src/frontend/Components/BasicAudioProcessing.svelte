@@ -9,40 +9,28 @@
     } from '@smui/button';
     import Dialog, {Actions } from '@smui/dialog';
     import SinWave from './audiobasic/SinWave.svelte';
-
+    import ThreeElements from './audiobasic/ThreeElements.svelte';
+    
+    
     let color = 'default';
     let openWaveDialog=false;
-    let openAmpDialog=false;
-    let openFreqDialog=false;
-    let openTimbreDialog=false;
+    let openThreeElemDialog=false;
+    let openCompoundToneDialog=false;
 
-    let response = 'Nothing yet.';
     function closeHandler(e: CustomEvent<{ action: string }>) {
-        switch (e.detail.action) {
-        case 'none':
-            response = "Ok, well, you're wrong.";
-            break;
-        case 'all':
-            response = 'You are correct. All dogs are the best dog.';
-            break;
-        default:
-            // This means the user clicked the scrim or pressed Esc to close the dialog.
-            // The actions will be "close".
-            response = "It's a simple question. You should be able to answer it.";
-            break;
-        }
+        console.log("close handler function");
     }
 </script>
 
 <body>
     <div class="paper-container">
         <Paper transition elevation={24} {color}>
-            <Title>声音</Title>
+            <Title>声音是什么？</Title>
             <Content>
                 <Paper>
                     <div>
                         <FormField align="end" style="display: flex;">
-                            <span slot="label" style="padding-right: 30px; width: max-content; display: block;">
+                            <span slot="label" style="padding-left: 50px; width: max-content; display: block;">
                                 本质：一种波
                             </span>
                             <Button on:click={() => (openWaveDialog = true)}>
@@ -55,11 +43,11 @@
                 <Paper>
                     <div>
                         <FormField align="end" style="display: flex;">
-                            <span slot="label" style="padding-right: 30px; width: max-content; display: block;">
-                                三要素：响度
+                            <span slot="label" style="padding-left: 50px; width: max-content; display: block;">
+                                三要素：响度、频率、音色
                             </span>
-                            <Button on:click={() => (openAmpDialog = true)}>
-                                <Label>查看响度</Label>
+                            <Button on:click={() => (openThreeElemDialog = true)}>
+                                <Label>查看三要素</Label>
                             </Button>
                         </FormField>
                     </div>
@@ -68,24 +56,12 @@
                 <Paper>
                     <div>
                         <FormField align="end" style="display: flex;">
-                            <span slot="label" style="padding-right: 30px; width: max-content; display: block;">
-                                三要素：频率
+                            <span slot="label" style="padding-left: 50px; width: max-content; display: block;">
+                                正弦波的叠加——复合音<br>
+                                复合音的分解——正弦波
                             </span>
-                            <Button on:click={() => (openFreqDialog = true)}>
+                            <Button on:click={() => (openCompoundToneDialog = true)}>
                                 <Label>查看频率</Label>
-                            </Button>
-                        </FormField>
-                    </div>
-                </Paper>
-                <br><br>
-                <Paper>
-                    <div>
-                        <FormField align="end" style="display: flex;">
-                            <span slot="label" style="padding-right: 30px; width: max-content; display: block;">
-                                三要素：音色
-                            </span>
-                            <Button on:click={() => (openTimbreDialog = true)}>
-                                <Label>查看音波图</Label>
                             </Button>
                         </FormField>
                     </div>
@@ -105,14 +81,34 @@
         <Content id="event-content">
             <SinWave/>
         </Content>
-        <Actions>
+        <!-- <Actions>
             <Button action="none">
             <Label>None of Them</Label>
             </Button>
             <Button action="all" default>
             <Label>All of Them</Label>
             </Button>
-        </Actions>
+        </Actions> -->
+    </Dialog>
+    <Dialog bind:open={openThreeElemDialog}  
+        fullscreen
+        aria-labelledby="fullscreen-title"
+        aria-describedby="fullscreen-content"
+        on:SMUIDialog:closed={closeHandler}
+        >
+        <Content id="event-content">
+            <ThreeElements/>
+        </Content>
+    </Dialog>
+    <Dialog bind:open={openCompoundToneDialog}  
+        fullscreen
+        aria-labelledby="fullscreen-title"
+        aria-describedby="fullscreen-content"
+        on:SMUIDialog:closed={closeHandler}
+        >
+        <Content id="event-content">
+            <SinWave/>
+        </Content>
     </Dialog>
 </body>
 
