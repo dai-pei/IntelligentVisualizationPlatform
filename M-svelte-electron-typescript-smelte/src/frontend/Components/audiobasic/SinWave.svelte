@@ -23,6 +23,11 @@
     let audio: any = null;
     let src: any;
     let preload = "metadata";
+    let paused = true;
+    let duration = 0;
+    let currentTime = 0;
+    let muted = false;
+    let volume = 1;
 
     let width: number = 400
     let height: number = 200
@@ -42,9 +47,10 @@
             sinWave.push(tempArr);
         }
         drawSinWave();
+        generateAudio();
     }
 
-    function generateAudioAndPlay(){
+    function generateAudio(){
         fetch(`http://127.0.0.1:6005/generateaudiofromsamples/`, {
         method: "post",
         body: JSON.stringify({
@@ -56,10 +62,13 @@
         },
         }).then((res) => {
             return res.json().then((response) => {
-            console.log(response);
-            src = response["path"];
-            
-            audio.play();
+            // console.log(response);
+            src = response["path"];      
+            if(src!=''|| src!=null){
+                console.log("src set");
+                console.log(src)      
+            }
+
             });
         })
         .catch((error) => {
@@ -112,8 +121,8 @@
 
 <body>
     <div>
-        <audio bind:this={audio}  on:play on:ended {src}
-                {preload}></audio>
+        <audio bind:this={audio} bind:paused bind:duration bind:currentTime {muted} {volume} {src} 
+        on:play on:ended {preload} crossOrigin="anonymous"></audio>
     </div>
     <LayoutGrid>
         <Cell span={12}>
@@ -169,8 +178,12 @@
         </Cell>
         <Cell span={3}>
             <div class="demo-cell">
-                <Button on:click={generateAudioAndPlay}>
-                    <Label>播放正弦波</Label>
+                <Button on:click={()=> audio.paused ? audio.play() : audio.pause() }>
+                    {#if paused}
+                        <Label>播放正弦波</Label>
+                    {:else}                    
+                        <Label>暂停播放</Label>
+                    {/if}
                 </Button>
             </div>
         </Cell>

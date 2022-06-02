@@ -1,8 +1,11 @@
+from email.mime import audio
 import librosa
 import numpy as np
 from flask import Flask,make_response
 from flask_restful import request,Api
 import json
+import os
+import soundfile as sf
 
 app = Flask(__name__)
 api = Api(app) 
@@ -64,10 +67,18 @@ def LoadSpecData(filepath):
 def GenerateAudioFromSamples(data,samplerate):
     global generateAudioIdx
     path="Audio"+str(generateAudioIdx)+".wav"
-    audiodata=np.asfortranarray(data)
-    librosa.output.write_wav(path,audiodata, sr=samplerate)
+    # audiodata=np.asfortranarray(data)
+    audiodata=np.array(data)
+    # print("data")
+    # print(data)
+    # print("audiodata")
+    # print(audiodata)
+    # librosa.output.write_wav(path,audiodata, sr=samplerate)
+    sf.write(path,audiodata,samplerate,format='flac',subtype='PCM_24')
     generateAudioIdx+=1
-    return path
+    absPath=os.path.abspath(path)
+    print("abs path:",absPath)
+    return absPath
 
 def LoadZeroCrossingRate(filepath,startsecond=-1,endsecond=-1):
     # y=LoadOrgData(filepath,startsecond,endsecond)
