@@ -125,70 +125,39 @@
         on:play on:ended {preload} crossOrigin="anonymous"></audio>
     </div>
     <LayoutGrid>
-        <Cell span={12}>
+        <Cell span={4}>
             <div class="demo-cell">
                 <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
-                    单一频率的声音——固定形状的正弦波;<br>
-                    sin_wave=A*sin(w*t+p)<br>
-                    A：振幅<br>
-                    f：频率<br>
-                    w：角频率，w=2*pi*f<br>
-                    p：相位<br>
+                    响度：声音的大小<br>
+                    物理意义：振幅<br>
+                    单位：宋（Sone）<br>
                 </p>
+                
             </div>
         </Cell>
-        <Cell span={3}>
+        <Cell span={4}>
             <div class="demo-cell">
+                <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
+                    音调：声音的高低<br>
+                    物理意义：频率<br>
+                    单位：赫兹（Hz）<br>
+                </p>
                 <Textfield variant="outlined" bind:value={valueAmp} label="振幅">
                     <HelperText slot="helper">代表响度</HelperText>
                 </Textfield>
             </div>
         </Cell>
-        <Cell span={3}>
+        <Cell span={4}>
             <div class="demo-cell">
+                <p use:Ripple={{ surface: true, color: 'primary' }} tabindex="0">
+                    音色：声音的大小<br>
+                    物理意义：不同的波形形状<br>
+                    单位：无<br>
+                </p>
                 <Textfield variant="outlined" bind:value={valueFreq} label="频率">
                     <HelperText slot="helper">周期为频率的倒数</HelperText>
                 </Textfield>
             </div>
-        </Cell>
-        <Cell span={3}>
-            <div class="demo-cell">
-                <Textfield disabled variant="outlined" bind:value={valueOmega} label="角频率">
-                    <HelperText slot="helper">角频率=2*频率*PI</HelperText>
-                </Textfield>
-            </div>
-        </Cell>
-        <Cell span={3}>
-            <div class="demo-cell">
-                <Textfield variant="outlined" bind:value={valuePhase} label="相位">
-                    <HelperText slot="helper">代表偏移量</HelperText>
-                </Textfield>
-            </div>
-        </Cell>
-        <Cell span={6}>
-            <div class="demo-cell">
-            </div>
-        </Cell>
-        <Cell span={3}>
-            <div class="demo-cell">
-                <Button on:click={generateSinWave}>
-                    <Label>生成正弦波</Label>
-                </Button>
-            </div>
-        </Cell>
-        <Cell span={3}>
-            <div class="demo-cell">
-                <Button on:click={()=> audio.paused ? audio.play() : audio.pause() }>
-                    {#if paused}
-                        <Label>播放正弦波</Label>
-                    {:else}                    
-                        <Label>暂停播放</Label>
-                    {/if}
-                </Button>
-            </div>
-        </Cell>
-        <Cell span={12}>
-            <div id="sinwave" />
         </Cell>
     </LayoutGrid>
 </body>

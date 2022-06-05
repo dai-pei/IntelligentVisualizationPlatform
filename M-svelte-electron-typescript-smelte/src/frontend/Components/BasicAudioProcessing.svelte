@@ -44,7 +44,7 @@
                     <div>
                         <FormField align="end" style="display: flex;">
                             <span slot="label" style="padding-left: 50px; width: max-content; display: block;">
-                                三要素：响度、频率、音色
+                                三要素：响度、音调、音色
                             </span>
                             <Button on:click={() => (openThreeElemDialog = true)}>
                                 <Label>查看三要素</Label>
