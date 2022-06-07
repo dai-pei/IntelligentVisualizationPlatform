@@ -132,7 +132,7 @@
                     物理意义：振幅<br>
                     单位：宋（Sone）<br>
                 </p>
-                
+                <div id="amplitudechart"/>
             </div>
         </Cell>
         <Cell span={4}>
@@ -145,6 +145,7 @@
                 <Textfield variant="outlined" bind:value={valueAmp} label="振幅">
                     <HelperText slot="helper">代表响度</HelperText>
                 </Textfield>
+                <div id="freqchart"/>
             </div>
         </Cell>
         <Cell span={4}>
@@ -156,7 +157,8 @@
                 </p>
                 <Textfield variant="outlined" bind:value={valueFreq} label="频率">
                     <HelperText slot="helper">周期为频率的倒数</HelperText>
-                </Textfield>
+                </Textfield>                
+                <div id="tonechart"/>
             </div>
         </Cell>
     </LayoutGrid>
